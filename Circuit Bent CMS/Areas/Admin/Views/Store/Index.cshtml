@@ -1,0 +1,130 @@
+@model CircuitBentCMS.Models.StoreViewModel
+
+@{
+    ViewBag.Title = "Store";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li class="active">Store</li>
+        </ol>
+    </div>
+    <div class="col-sm-6 buttons">
+        <div class="btn-group">
+            <a href="/Admin/Store/Create" class="btn btn-default">
+                <i class="fa fa-plus"></i> Add new store item
+            </a>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#storeSettingsModal">
+                <i class="fa fa-cog"></i> Store settings
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="storeSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Store settings</h4>
+            </div>
+            
+            @using (Html.BeginForm("Settings", "Store", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="StoreSettings_ProductsInRow" class="control-label col-sm-4">Items in a row</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                @Html.HiddenFor(a => a.StoreSettings.StoreSettingsId)
+                                @Html.TextBoxFor(a => a.StoreSettings.ProductsInRow, new { @class = "form-control" })
+
+                                <div class="input-group-addon">
+                                    <img src="~/Images/icons/actions/info.png" alt="Info" title="Changes the number of products displayed in every row." class="info-icon" />
+                                </div>
+                            </div>
+                        </div>
+        
+                    </div>
+                    <div class="form-group">
+                        <label for="StoreSettings_ThumbnailHeight" class="control-label col-sm-4">Thumbnail max height</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                @Html.TextBoxFor(a => a.StoreSettings.ThumbnailHeight, new { @class = "form-control" })
+                                <div class="input-group-addon">
+                                    <img src="~/Images/icons/actions/info.png" alt="Info" title="The max height of the thumbnails." class="info-icon" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="StoreSettings_ImageSliderId" class="control-label col-sm-4">Image slider</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                @Html.DropDownListFor(a => a.StoreSettings.ImageSliderId, Model.ImageSliders.Select(p => new SelectListItem { Text = p.Title, Value = p.ImageSliderId.ToString() }), "No image slider", new { @class = "form-control" })
+                                <div class="input-group-addon">
+                                    <img src="~/Images/icons/actions/info.png" alt="Info" title="Allows you to show an image slider above the products to display offers, new products etc." class="info-icon" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            }
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<ul class="sortable">
+@foreach (var item in Model.StoreItems)
+{
+    <li data-id="@item.StoreItemId" class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="store-item">
+            <div class="image"> 
+                @if (item.StoreItemImages.Count > 0)
+                {
+                    <span class="helper"></span><img src="~/Images/Store/thumb_@item.StoreItemImages.FirstOrDefault().ImageUrl" alt="Image" />
+                }
+                
+            </div>
+            <div class="info">
+                @item.Title
+            </div>
+            <button type="button" class="price btn btn-success btn-xs">
+                <span class="glyphicon glyphicon-tag"></span> @item.Price
+            </button>
+            <div class="action btn-group">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/Admin/Store/Edit/@item.StoreItemId"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
+                    <li><a href="/Admin/Store/Delete/@item.StoreItemId"><i class="fa fa-fw fa-trash-o"></i> Delete</a></li>
+                </ul>
+            </div>
+        </div>
+    </li>
+}
+</ul>
+
+@section Scripts
+{
+<script src="~/Scripts/Sortable.js"></script>
+<script>
+    $(function () {
+        InitSortable('/Admin/Store/UpdateOrder');
+    });
+
+</script>
+}

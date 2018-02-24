@@ -1,0 +1,52 @@
+﻿@model CircuitBentCMS.Models.StoreViewModel
+@{
+    ViewBag.Title = ViewBag.PageTitle;
+
+    // variables for clearing the float after 3 store items
+    double i = 1;
+    int divideBy = Model.StoreSettings.ProductsInRow;
+    double result;
+    bool isInt = false;
+}
+
+<style>
+    .store-item {
+        width: @(100/divideBy)%;
+    }
+    .store-item .image {
+        height: @(Model.StoreSettings.ThumbnailHeight)px !important;
+    }
+</style>
+
+
+@foreach (var item in Model.StoreItems)
+{
+    <div class="store-item">
+        <a href="/shop/@CircuitBentCMS.Models.CustomHelpers.CreateSlug(item.Title)">
+            <div class="image">
+                <span class="helper"></span>
+                @foreach (var image in item.StoreItemImages.Take(1))
+                {
+                    <img src="~/Images/Store/thumb_@image.ImageUrl" alt="@image.ImageUrl" />
+                }
+            </div>
+            <div class="info">
+                <h3>@item.Title</h3>
+                @if (!String.IsNullOrEmpty(item.Price))
+                {
+                    <h4>@item.Price</h4>
+                }
+            
+            </div>
+        </a>
+    </div>
+    
+    // if when the counter is divided by 3 returns an int, then insert a clear fix
+	result = i / divideBy;
+	isInt = (result == (int)result);
+	if (isInt)
+	{
+		<div class="clearfix"></div>  
+    }
+    i++;
+}

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<CircuitBentCMS.Models.Font>
+@{
+    ViewBag.Title = "Manage fonts";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.popup.cshtml";
+}
+
+@if (Request.QueryString["closeWindow"] == "true")
+{
+    <script>
+        window.opener.document.location.reload(true);
+        window.close();
+    </script>
+}
+@TempData["ErrorMessage"]
+
+<form id="add-font" action="/Admin/SiteDesign/AddFont" method="post" enctype="multipart/form-data" class="form-horizontal">
+    <h1>Add new font</h1>
+    <div class="form-group">
+        <label for="Name" class="control-label col-sm-2">Font name</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="text" name="Name" id="Name" maxlength="20" class="form-control" />
+                <div class="input-group-addon">
+                    <img src="~/Images/icons/actions/info.png" alt="Info" title="This needs to correspond to the font-family attribute in the CSS code." class="info-icon" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="files" class="control-label col-sm-2">Font files</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="file" name="files" id="files" multiple class="form-control" />
+                <div class="input-group-addon">
+                    <img src="~/Images/icons/actions/info.png" alt="Info" title="Select the font files you want to upload. Normally a web font contains four formats (.ttf, .eot, .woff and .svg). Depending on the font you might not have all of them." class="info-icon" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="CssCode" class="control-label col-sm-2">CSS code</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <textarea name="CssCode" id="CssCode" class="form-control" rows="6"></textarea>
+                <div class="input-group-addon">
+                    <img src="~/Images/icons/actions/info.png" alt="Info" title="The code in the CSS file you get when downloading a webfont kit." class="info-icon" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary">Add font</button>
+            <button type="reset" class="btn btn-default">Clear</button>
+        </div>
+    </div>
+</form>
+
+<h1 style="margin-top: 40px">Existing fonts</h1>
+
+<table class="table table-hover">
+    <tr>
+        <th>Font name</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td class="right">
+            <a href="/Admin/SiteDesign/DeleteFont/@item.FontId" class="btn btn-default" title="Delete"><i class="fa fa-trash-o"></i></a>
+        </td>
+    </tr>
+}
+</table>

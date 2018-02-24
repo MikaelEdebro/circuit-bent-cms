@@ -1,0 +1,25 @@
+@model CircuitBentCMS.Models.StoreItem
+
+@{
+    ViewBag.Title = "Store › Delete item";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Store">Store</a></li>
+            <li class="active">Delete item</li>
+        </ol>
+    </div>
+</div>
+
+<p>Are you sure you want to delete the store item "<b>@Model.Title</b>"?</p>
+
+@using (Html.BeginForm()) {
+    <p>
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a href="/Admin/Store" class="btn btn-default">Back to list</a>
+    </p>
+}
+
+

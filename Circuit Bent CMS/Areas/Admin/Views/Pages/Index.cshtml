@@ -1,0 +1,190 @@
+@model IList<CircuitBentCMS.Models.Page>
+
+@{
+    ViewBag.Title = "Pages";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li class="active">Pages</li>
+        </ol>
+    </div>
+    <div class="col-sm-6 buttons">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newPageModal">
+                <i class="fa fa-plus"></i> Create new page
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newPageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Create new page</h4>
+                <p>
+                    You can either create a blank page or choose any of the special pages.
+                </p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <a href="/Admin/Pages/Create" class="quick-link">
+                            <img src="~/Images/icons/admin/new-page-blank.png" alt="Blank page" />
+                            <h4>Blank page</h4>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="/Admin/Pages/Create/?type=shop" class="quick-link">
+                            <img src="~/Images/icons/admin/new-page-store.png" alt="Shop" />
+                            <h4>Shop</h4>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="/Admin/Pages/Create/?type=events" class="quick-link">
+                            <img src="~/Images/icons/admin/new-page-events.png" alt="Events" />
+                            <h4>Shows & Events</h4>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <a href="/Admin/Pages/Create/?type=blog" class="quick-link">
+                            <img src="~/Images/icons/admin/new-page-blog.png" alt="Blog" />
+                            <h4>Blog</h4>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="/Admin/Pages/Create/?type=imagegallery" class="quick-link">
+                            <img src="~/Images/icons/admin/new-page-imagegallery.png" alt="Image gallery" />
+                            <h4>Image gallery</h4>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="/Admin/Pages/Create/?type=externallink" class="quick-link">
+                            <img src="~/Images/icons/admin/new-page-externallink.png" alt="External link" />
+                            <h4>External link</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Count > 0)
+{
+    <ul class="sortable">
+    @foreach (var item in Model.Where(a => a.SubPageToPageId == 0))
+    {
+        string showExpandClass = " hide";
+        
+        <li class="page clearfix" data-id="@item.PageId" data-subpage-id="@item.SubPageToPageId" data-slug="@CircuitBentCMS.Models.CustomHelpers.CreateSlug(item.Title)">
+            @if (Model.Where(a => a.SubPageToPageId == item.PageId).ToList().Count > 0)
+            {
+                // show the expand icon if there are any sub pages, otherwise keep hidden
+                showExpandClass = "";
+            }
+            <div class="expand@(showExpandClass)">
+                <i class="fa fa-chevron-circle-down"></i>
+            </div>
+            
+            <div class="info">
+                @item.Title
+            </div>
+
+            <div class="icons">
+                @{
+                    string disabledClass = "";
+                    if (Model.Where(a => a.SubPageToPageId == item.PageId).ToList().Count > 0)
+                    {
+                        disabledClass = " disabled";
+                    }
+                }
+                <i class="fa fa-chevron-left arrow-left disabled" title="Set as main page"></i>
+                <i class="fa fa-chevron-right arrow-right@(disabledClass)" title="Set as sub page"></i>
+
+                @{
+                    // dim the "Set as homepage" icons, except the one set as homepage
+                    string homePageClass = "";
+                    if (!item.HomePage)
+                    {
+                        homePageClass = " set-homepage";
+                    }
+                }
+                <i class="fa fa-globe homepage-icon@(homePageClass) " data-id="@item.PageId" title="Set as home page"></i>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            @if (!String.IsNullOrEmpty(item.CustomPage))
+                            {
+                                <a href="/Admin/Pages/Edit/@item.PageId/?type=@item.CustomPage"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                            }
+                            else
+                            {
+                                <a href="/Admin/Pages/Edit/@item.PageId"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                            }
+                        </li>
+                        <li>
+                            <a href="/Admin/Pages/Delete/@item.PageId"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        
+        
+        if (Model.Where(a => a.SubPageToPageId == item.PageId).ToList().Count > 0)
+        {       
+            foreach (var subPage in Model.Where(a => a.SubPageToPageId == item.PageId).OrderBy(a => a.Order))
+            {
+                <li class="page sub-page clearfix" data-id="@subPage.PageId" data-subpage-id="@subPage.SubPageToPageId" data-slug="@CircuitBentCMS.Models.CustomHelpers.CreateSlug(subPage.Title)"> 
+                    <div class="info">
+                        @subPage.Title
+                    </div>
+                    <div class="icons">
+                        <i class="fa fa-chevron-left arrow-left" title="Set as main page"></i>
+                        <i class="fa fa-chevron-right arrow-right disabled" title="Set as sub page"></i>
+
+                        <i title="Set as homepage" class="fa fa-globe homepage-icon hide" data-id="@subPage.PageId"></i>
+                        
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    @if (!String.IsNullOrEmpty(subPage.CustomPage))
+                                    {
+                                        <a href="/Admin/Pages/Edit/@subPage.PageId/?type=@subPage.CustomPage"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/Admin/Pages/Edit/@subPage.PageId"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                                    }
+                                </li>
+                                <li>
+                                    <a href="/Admin/Pages/Delete/@subPage.PageId"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    }
+    </ul>
+}
+
+@section Scripts
+{
+<script src="~/Scripts/Pages.js"></script>
+}

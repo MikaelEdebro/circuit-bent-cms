@@ -1,0 +1,18 @@
+namespace CircuitBentCMS.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class AddedScriptsToPage : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.Pages", "Scripts", c => c.String());
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.Pages", "Scripts");
+        }
+    }
+}

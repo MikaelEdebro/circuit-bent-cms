@@ -1,0 +1,54 @@
+@model BandPage.Models.Page
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Title)
+    @Html.EditorFor(model => model.Title)
+    @Html.EditorFor(model => model.HideTitle)
+    <span>Hide the title for this page</span>
+    @Html.ValidationMessageFor(model => model.Title)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Content)
+    @Html.TextAreaFor(model => model.Content, new { @class = "textareaBig" })
+    @Html.ValidationMessageFor(model => model.Content)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Slug)
+    @Html.EditorFor(model => model.Slug)
+    <img src="~/Images/info.png" alt="Info" title="A slug is the descriptive URL after the domain name. For example in http://domain.com/reviews the slug is reviews." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Slug)
+</div>
+
+<div class="form-row">
+    <label for="show-menu">Show on menu</label>
+
+    <input type="checkbox" name="show-menu" id="show-menu" @if (ViewBag.MenuItem != null) {<text>checked="checked"</text>} />
+    
+</div>
+
+<div id="show-menu-title">
+    <div class="form-row">
+        <label for="menu-title">Menu item text</label>
+        <input type="text" name="menu-title" @if (ViewBag.MenuItem != null) {<text>value="@ViewBag.MenuItem.Title"</text>} />
+        <img src="~/Images/info.png" alt="Info" title="The text that appears on the menu." class="info-icon" />
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var layer = $('#show-menu-title');
+
+        // show the layer if there are an existing menu item, otherwise hide
+        $('#show-menu').prop('checked') ? layer.show() : layer.hide();
+
+        
+        // toggle the layer
+        $('#show-menu').change(function () {
+            this.checked ? layer.show() : layer.hide();
+
+        });
+    });
+</script>
+

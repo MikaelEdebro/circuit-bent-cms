@@ -1,0 +1,123 @@
+@model IEnumerable<BandPage.Models.Show>
+
+@{
+    ViewBag.Title = "Shows";
+}
+
+<h1>Shows</h1>
+
+@using (Html.BeginForm("ShowsOnMenu", "Shows"))
+{
+    <div class="form-row">
+        <span>Display a link to the shows on the main menu with the following text:</span>
+        <input type="text" name="ShowsOnMenu" id="ShowsOnMenu" class="textboxSmall" value="@ViewBag.ShowsOnMenu" />
+        <input type="submit" value="Save" />
+    </div>
+    
+}
+
+
+@Html.ActionLink("Add show", "Create")
+
+
+<table>
+    <tr>
+        <th></th>
+        <th>
+            Date
+        </th>
+        <th>
+            Event
+        </th>
+        <th class="table-hide">
+            Venue
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Where(a => a.Date > DateTime.Now)) {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ShowId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ShowId })
+        </td>
+        <td>
+			@String.Format("{0:d}", item.Date)
+        </td>
+        <td>
+            @if (item.Cancelled)
+            {
+                <span class="show-cancelled">@item.Title</span> <span> (cancelled)</span>
+            }
+            else
+            {
+                @item.Title
+            }
+        </td>
+        <td class="table-hide">
+			@item.Venue
+        </td>
+        <td>
+            @if (item.Cancelled)
+            {
+                <img src="~/Images/ok.png" alt="Reinstate" /> @Html.ActionLink("Reinstate show", "ReinstateShow", new { id = item.ShowId })
+            }
+            else
+            {
+                <img src="~/Images/cancel.png" alt="Cancel" /> @Html.ActionLink("Cancel show", "CancelShow", new { id = item.ShowId })
+            }
+			
+        </td>
+    </tr>
+}
+
+</table>
+
+<h3 style="margin-top: 30px;">Previous shows</h3>
+<table>
+    <tr>
+        <th></th>
+        <th>
+            Date
+        </th>
+        <th>
+            Event
+        </th>
+        <th>
+            Venue
+        </th>
+        <th>
+            Time
+        </th>
+        <th>
+            Price
+        </th>
+    </tr>
+
+@foreach (var item in Model.Where(a => a.Date < DateTime.Now))
+{
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ShowId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ShowId })
+        </td>
+        <td>
+			@String.Format("{0:g}", item.Date)
+        </td>
+        <td>
+			@item.Title
+        </td>
+        <td>
+			@item.Venue
+        </td>
+        <td>
+			@item.Time
+        </td>
+        <td>
+			@item.Price
+        </td>
+    </tr>
+}
+
+</table>
+

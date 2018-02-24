@@ -1,0 +1,43 @@
+﻿@model CircuitBentCMS.Models.BlogViewModel
+
+@{
+    ViewBag.Title = Model.Blog.Headline;
+}
+<div class="row">
+    <div class="col-sm-9 column-main">
+        @if (Model.Blog != null)
+        {
+            <div class="blog-post">
+                <h1>@Model.Blog.Headline <small>(@Model.Blog.Date.Day/@Model.Blog.Date.Month)</small></h1>
+
+                @Html.Raw(Model.Blog.Text)
+            </div>
+        }
+    </div>
+    <div class="col-sm-3 column-right">
+        <h3>@Resources.Widgets.BlogPosts.RecentPosts</h3>
+        @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets("[widget=recentblogs]"))
+
+        <p class="blog-show-all">
+            <a href="/blog/archive">@Resources.Widgets.BlogPosts.ShowAllPosts ›</a>
+        </p>
+    </div>
+</div>
+
+@section MetaSocialMediaTitle
+{
+    <meta property="og:title" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Headline, 95, false), false)" />
+    <meta itemprop="name" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Headline, 140, false), false)">
+    <meta name="twitter:title" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Headline, 70, false), false)">
+}
+@section MetaSocialMediaDescription
+{
+    <meta property="og:description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Text, 297, false), false)" />
+    <meta itemprop="description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Text, 185, false), false)">
+    <meta name="twitter:description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Text, 200, false), false)">
+}
+
+@section MetaDescription
+{
+    <meta name="description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Blog.Text, 297, false), false)" />
+}

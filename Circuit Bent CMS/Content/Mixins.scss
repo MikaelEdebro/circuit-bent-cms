@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'open_sansregular';
+    src: url('/Content/fonts/OpenSans-Regular-webfont.eot');
+    src: url('/Content/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/Content/fonts/OpenSans-Regular-webfont.woff') format('woff'),
+         url('/Content/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
+         url('/Content/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'open_sanslight';
+    src: url('/Content/fonts/OpenSans-Light-webfont.eot');
+    src: url('/Content/fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/Content/fonts/OpenSans-Light-webfont.woff') format('woff'),
+         url('/Content/fonts/OpenSans-Light-webfont.ttf') format('truetype'),
+         url('/Content/fonts/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+       -o-border-radius: $radius;
+          border-radius: $radius;
+}
+@mixin border($opacity) {
+	border: 1px solid rgba(0, 0, 0, $opacity);
+}
+@mixin box-shadow($size, $opacity) {
+	-moz-box-shadow: 0 0 $size rgba(0, 0, 0, $opacity);
+  -webkit-box-shadow: 0 0 $size rgba(0, 0, 0, $opacity);
+  box-shadow: 0 0 $size rgba(0, 0, 0, $opacity);
+}
+
+@mixin word-wrap() {
+	-ms-word-break: break-all;
+	word-break: break-all;
+
+	/* Non standard for webkit */
+	word-break: break-word;
+
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
+}

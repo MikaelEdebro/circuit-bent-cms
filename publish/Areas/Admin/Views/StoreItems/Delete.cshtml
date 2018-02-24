@@ -1,0 +1,18 @@
+@model BandPage.Models.StoreItem
+
+@{
+    ViewBag.Title = "Store › Delete item";
+}
+
+<h1>Store › Delete item</h1>
+
+<p>Are you sure you want to delete the store item "<b>@Model.Title</b>"?</p>
+
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
+
+

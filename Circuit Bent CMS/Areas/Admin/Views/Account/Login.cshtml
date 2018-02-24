@@ -1,0 +1,36 @@
+﻿@model CircuitBentCMS.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.login.cshtml";
+}
+
+<div class="login-form clearfix">
+    <div class="logo">
+        <img src="~/Images/circuit-bent-studios-logo-square-small.png" />
+    </div>
+    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="form-group col-xs-12">
+            @Html.TextBoxFor(m => m.UserName, new { placeholder = "Username", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.UserName)
+        </div>
+        <div class="form-group col-xs-12">
+            @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+        <div class="form-group col-xs-7">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                    @Html.LabelFor(m => m.RememberMe)
+                </label>
+            </div>
+            
+        </div>
+        <div class="col-xs-5" style="text-align: right">
+            <button type="submit" class="btn btn-default"> Log in</button>
+        </div>
+    }
+</div>

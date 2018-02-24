@@ -1,0 +1,67 @@
+@model IEnumerable<BandPage.Models.StoreItem>
+
+@{
+    ViewBag.Title = "Store";
+}
+
+<h1>Store</h1>
+
+<p>
+    @Html.ActionLink("Add new store item", "Create")
+</p>
+<table>
+    <tr>
+        <th></th>
+        <th class="table-hide">
+            Image
+        </th>
+        <th>
+            Title
+        </th>
+        <th class="table-hide">
+            Description
+        </th>
+        <th class="table-hide">
+            Price
+        </th>
+        <th class="table-hide">
+            Sold out
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.StoreItemId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.StoreItemId })
+        </td>
+        <td class="table-hide">
+			<img src="~/Images/Store/@item.ImageUrl" class="store-image" />
+        </td>
+        <td>
+			@item.Title
+        </td>
+        <td class="table-hide">
+			@item.Description
+        </td>
+        <td class="table-hide">
+			@item.Price
+        </td>
+        
+        <td class="table-hide">
+            @if (item.SoldOut)
+            {
+                <span style="color: Red">Yes</span>
+            }
+            else
+            {
+                <span style="color: Green">No</span>
+            }
+			
+        </td>
+    </tr>
+}
+
+</table>
+
+

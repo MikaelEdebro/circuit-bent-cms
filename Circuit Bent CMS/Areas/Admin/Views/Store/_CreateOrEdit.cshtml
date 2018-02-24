@@ -1,0 +1,86 @@
+@model CircuitBentCMS.Models.StoreItem
+
+<div class="form-group">
+    <label for="Title" class="control-label col-sm-2">Name</label>
+    <div class="col-sm-10">
+        @Html.TextBoxFor(model => model.Title, new { @class = "form-control", maxlength = "100" })
+        @Html.ValidationMessageFor(model => model.Title)
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="Description" class="control-label col-sm-2">Description</label>
+    <div class="col-sm-10">
+        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "10" })
+        @Html.ValidationMessageFor(model => model.Description)
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="PaypalCode" class="control-label col-sm-2">Paypal code</label>
+    <div class="col-sm-10">
+        @Html.TextAreaFor(model => model.PaypalCode, new { @class = "form-control", rows = "5" })
+        @Html.ValidationMessageFor(model => model.PaypalCode)
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="Price" class="control-label col-sm-2">Price</label>
+    <div class="col-sm-10">
+        @Html.TextBoxFor(model => model.Price, new { @class = "form-control", maxlength = "10" })
+        @Html.ValidationMessageFor(model => model.Price)
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="input-group">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(model => model.SoldOut)
+                        Mark as "Sold out"
+                        
+                    </label>
+                </div>
+            <div class="input-group-addon">
+                <img src="~/Images/icons/actions/info.png" alt="Info" title="Items marked Sold out will not be shown in the store. This might be useful if you're out of stock, but don't want to delete the item and have to add it back later." class="info-icon" />
+            </div>
+        </div>
+        
+        
+        @Html.ValidationMessageFor(model => model.SoldOut)
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="files" class="col-sm-2 control-label">Upload images</label>
+    <div class="col-sm-10">
+        <input type="file" name="files" id="files" multiple class="form-control" />
+    </div>
+</div>
+
+@if (Model.StoreItemImages.Count > 0)
+{
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="row existing-images">
+                @foreach (var image in Model.StoreItemImages.OrderBy(a => a.StoreItemImageId))
+                {
+                    <div class="col-xs-6 col-sm-4 col-md-3">
+                        <div class="thumbnail">
+                            <a href="~/Images/Store/@image.ImageUrl" class="fancybox" rel="group1">
+                                <img src="~/Images/Store/thumb_@image.ImageUrl" alt="@image.ImageUrl" title="View full image" />
+                            </a>
+                            <div class="caption">
+				                <p>@image.ImageUrl</p>
+                                    
+                                <button type="button" class="btn-delete-image btn btn-default btn-xs" data-id="@image.StoreItemImageId">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                }
+            </div>
+        </div>
+    </div>
+}

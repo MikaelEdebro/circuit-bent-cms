@@ -1,0 +1,46 @@
+@model BandPage.Models.MailSettings
+
+@* This partial view defines form fields that will appear when creating and editing entities *@
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Email)
+    @Html.EditorFor(model => model.Email)
+    <img src="~/Images/info.png" alt="Info" title="The e-mail address that the contact form will send e-mails to." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Email)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.SMTP)
+    @Html.EditorFor(model => model.SMTP)
+    <img src="~/Images/info.png" alt="Info" title="The address to your web hosts SMTP server. Normally smtp.yourdomain.com or mail.yourdomain.com, but could vary. Check your web hosts support pages." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.SMTP)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Port)
+    @Html.EditorFor(model => model.Port)
+    <img src="~/Images/info.png" alt="Info" title="Port for the outgoing e-mail (usually 25 or 587). Check your web hosts support pages about this." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Port)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Username)
+    @Html.EditorFor(model => model.Username)
+    <img src="~/Images/info.png" alt="Info" title="To send e-mails through the SMTP server you need to supply a valid e-mail account. This is normally set up in the web hosts control panel." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Username)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Password)
+    @Html.EditorFor(model => model.Password)
+    <img src="~/Images/info.png" alt="Info" title="To send e-mails through the SMTP server you need to supply a valid e-mail account. This is normally set up in the web hosts control panel." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Password)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.ContactPageText)
+    @Html.TextAreaFor(model => model.ContactPageText, new { @class = "textareaSmall" })
+    <img src="~/Images/info.png" alt="Info" title="This text will appear above the contact form on the contact page. Can be used to give additional info about how to contact you." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.ContactPageText)
+</div>
+

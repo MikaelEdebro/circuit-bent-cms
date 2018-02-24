@@ -1,0 +1,209 @@
+﻿@model CircuitBentCMS.Models.Page
+
+<ul class="nav nav-tabs" style="margin-bottom: 20px">
+    <li class="active"><a href="#content" data-toggle="tab">Main content</a></li>
+    @if (String.IsNullOrEmpty(Request.QueryString["type"]))
+    {
+        <li><a href="#sidebar" data-toggle="tab">Sidebar content</a></li>
+        <li><a href="#widgets" data-toggle="tab">Widget areas</a></li>
+    }
+    
+    <li><a href="#socialmedia" data-toggle="tab">Social media</a></li>
+    <li><a href="#scripts" data-toggle="tab">Scripts</a></li>
+    <li class="submit-button">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="content">
+        
+        @if (!String.IsNullOrEmpty(Request.QueryString["type"]))
+        {
+            <input type="hidden" name="CustomPage" id="CustomPage" value="@Request.QueryString["type"]" />
+            <div class="form-group">
+                <label class="control-label col-sm-2">Page type:</label>
+                <div class="col-sm-10">
+                    @switch (Request.QueryString["type"])
+                    {
+                        case "shop":
+                            <img src="~/Images/icons/admin/new-page-store.png" alt="Shop" /> <span>Shop</span>
+                            break;
+                        case "events":
+                            <img src="~/Images/icons/admin/new-page-events.png" alt="Events" /> <span>Events</span>
+                            break;
+                        case "blog":
+                            <img src="~/Images/icons/admin/new-page-blog.png" alt="Blog" /> <span>Blog</span>
+                            break;
+                        case "imagegallery":
+                            <img src="~/Images/icons/admin/new-page-imagegallery.png" alt="Image gallery" /> <span>Image gallery</span>
+                            break;
+                        case "externallink":
+                            <img src="~/Images/icons/admin/new-page-externallink.png" alt="Image gallery" /> <span>External link</span>
+                            break;
+                    }
+                </div>
+        
+            </div>
+        }
+
+        <div class="form-group">
+            <label for="Title" class="control-label col-sm-2">Title</label>
+            <div class="col-sm-8">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "Enter page title" })
+                @Html.ValidationMessageFor(model => model.Title)
+            </div>
+            <div class="col-sm-2">
+                <div class="checkbox">
+                    <label>
+                        @Html.EditorFor(model => model.ShowOnMenu)
+                        Show on menu
+                    </label>
+
+                </div>
+            </div>
+        </div>
+
+        @if (Request.QueryString["type"] == "externallink")
+        {
+            <div class="form-group">
+                <label for="ExternalLinkUrl" class="control-label col-sm-2">External link URL</label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(model => model.ExternalLinkUrl, new { @class = "form-control", placeholder = "Enter address to an external page" })
+                    @Html.ValidationMessageFor(model => model.ExternalLinkUrl)
+                </div>
+            </div>
+        }
+        @if (String.IsNullOrEmpty(Request.QueryString["type"]))
+        {
+            <div class="form-group">
+                <label for="Content" class="control-label col-sm-2">Main content</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(model => model.Content, new { @class = "form-control", rows = "20" })
+                    @Html.ValidationMessageFor(model => model.Content)
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tab-pane" id="sidebar">
+        @if (String.IsNullOrEmpty(Request.QueryString["type"]))
+        {
+            <div class="form-group">
+                <label for="SideBarContent" class="control-label col-sm-2">Sidebar content</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(model => model.SideBarContent, new { @class = "form-control", rows = "20" })
+                    @Html.ValidationMessageFor(model => model.SideBarContent)
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tab-pane" id="widgets">
+        @if (String.IsNullOrEmpty(Request.QueryString["type"]))
+        {
+            <div class="form-group">
+                <label for="WidgetArea1" class="control-label col-sm-2">Widget 1</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(model => model.WidgetArea1, new { @class = "form-control", rows = "10" })
+                    @Html.ValidationMessageFor(model => model.WidgetArea1)
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="WidgetArea2" class="control-label col-sm-2">Widget 2</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(model => model.WidgetArea2, new { @class = "form-control", rows = "10" })
+                    @Html.ValidationMessageFor(model => model.WidgetArea2)
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="WidgetArea3" class="control-label col-sm-2">Widget 3</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(model => model.WidgetArea3, new { @class = "form-control", rows = "10" })
+                    @Html.ValidationMessageFor(model => model.WidgetArea3)
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="WidgetArea4" class="control-label col-sm-2">Widget 4</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(model => model.WidgetArea4, new { @class = "form-control", rows = "15" })
+                    @Html.ValidationMessageFor(model => model.WidgetArea4)
+                </div>
+            </div>
+            
+        }
+    </div>
+    <div class="tab-pane" id="socialmedia">
+        <div class="form-group">
+            <label for="SocialMediaTitle" class="control-label col-sm-2">Title</label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.SocialMediaTitle, new { @class = "form-control", maxlength = "95" })
+                    <span class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Specify the title that will be visible when sharing the page on social media. If not supplied, it will fall back to using the page title that you entered under Site settings." class="info-icon" />
+                    </span>
+                </div>
+                
+                @Html.ValidationMessageFor(model => model.SocialMediaTitle)
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="SocialMediaDescription" class="control-label col-sm-2">Description</label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    @Html.TextAreaFor(model => model.SocialMediaDescription, new { @class = "form-control", rows = "6", maxlength = "297" })
+                    <span class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Specify the description that will be visible when sharing the page on social media. If not supplied, it will fall back to using the page description that you entered under Site settings." class="info-icon" />
+                    </span>
+                </div>
+                
+                @Html.ValidationMessageFor(model => model.SocialMediaDescription)
+            </div>
+        </div>
+
+        @if (!String.IsNullOrEmpty(Model.SocialMediaImage))
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="thumbnail social-media-image">
+                        <img src="~/Images/PageImages/@Model.SocialMediaImage" />
+                        <div class="caption">
+                            <button type="button" class="btn-delete-image btn btn-default" data-id="@Model.PageId"><i class="fa fa-trash-o"></i> Delete</button>
+                        </div>
+                    </div>
+                    
+                    @Html.HiddenFor(a => a.SocialMediaImage)
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <label for="socialImage" class="control-label col-sm-2">Image</label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    <input type="file" name="socialImage" id="socialImage" class="form-control" />
+                    <span class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Upload an image that will be shown when sharing the page. Use a square image that is at least 200x200px. Facebook recommends using a larger image up to 1200px." class="info-icon" />
+                    </span>
+                </div>
+                
+                @Html.ValidationMessageFor(model => model.SocialMediaImage)
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="scripts">
+        <div class="alert alert-warning alert-dismissable col-sm-offset-2 col-sm-10">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            This section allow more advanced users to have better control over the elements on the page, like changing styles etc. 
+            Only recommended if you have good knowledge of web development and scripting.
+        </div>
+        <p class="col-sm-offset-2 col-sm-10">
+            
+        </p>
+        <div class="form-group">
+            <label for="Scripts" class="control-label col-sm-2">Scripts</label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.Scripts, new { @class = "form-control", rows = "20" })
+                @Html.ValidationMessageFor(model => model.Scripts)
+            </div>
+        </div>
+    </div>
+</div>

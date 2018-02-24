@@ -1,0 +1,257 @@
+﻿@model IEnumerable<CircuitBentCMS.Models.File>
+@{
+    if (ViewBag.UsePopupLayout == true)
+    {
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.popup.cshtml";
+    }
+    ViewBag.Title = "File manager";
+}
+
+<div class="row menu">
+    <div class="col-xs-6">
+        <ol class="breadcrumb">
+            <li class="active">File manager</li>
+        </ol>
+    </div>
+    <div class="col-xs-6 buttons">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#uploadModal">
+                <i class="fa fa-plus"></i> Upload files
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Upload images</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("FileUpload", "Files", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+                {
+                    <div class="form-group">
+                        <label for="files" class="control-label col-sm-3">Select files</label>
+                        <div class="col-sm-9">
+                            <input type="file" name="files" id="files" class="form-control" multiple />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+    
+                    if (ViewBag.UsePopupLayout == true)
+                    {
+                        <input type="hidden" name="UsePopupLayout" value="true" />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="file-list clearfix">
+@foreach (var item in Model)
+{
+    <li class="col-xs-6 col-sm-3 col-md-2">
+        <div class="store-item">
+		    <div class="image">
+                <span class="helper"></span>
+			    <a href="~/UserUploads/@item.FileName" target="_blank" @if (ViewBag.UsePopupLayout == true) { <text>title="Click to insert file"</text> } class="file-link fancybox" rel="group1" data-file-extension="@item.FileExtension">
+			        @if (!String.IsNullOrEmpty(item.FileExtension))
+                    {
+                        string[] fileExt = { ".png", ".jpg", ".gif", ".jpeg" };
+                        if (Array.IndexOf(fileExt, item.FileExtension.ToLower()) > -1)
+                        {
+                            // if there isn't a thumbnail available, show the original image
+                            // to make sure the old sites work without having to upload the images again
+                            if (System.IO.File.Exists(Path.Combine(Server.MapPath("/UserUploads"), "thumb_" + item.FileName)))
+                            {
+                                <img src="~/UserUploads/thumb_@item.FileName" /> 
+                            }
+                            else
+                            {
+						        <img src="~/UserUploads/@item.FileName" /> 
+                            }
+                        }
+                        else
+                        {
+                            if (System.IO.File.Exists(Server.MapPath("~/Images/icons/file-extensions/" + item.FileExtension.Replace(".", "") + ".png")))
+                            {
+						        <img src="~/Images/icons/file-extensions/@(item.FileExtension.Replace(".", "")).png" />
+                            }
+                            else
+                            {
+						        <img src="~/Images/icons/file-extensions/_blank.png" />  
+                            }
+                        }
+                    }
+                    else
+                    {
+				        <img src="~/Images/icons/file-extensions/_blank.png" />
+                    }
+			    </a>
+		    </div>
+		    <div class="info">
+			    @if (item.FileName.Length > 100)
+                {
+				    <span title="@item.FileName">
+                        @CircuitBentCMS.Models.CustomHelpers.Truncate(item.FileName, 100, true)@item.FileExtension
+                    </span>
+                }
+                else
+                {
+				    @item.FileName
+                }
+		    </div>
+
+            <button type="button" class="btn btn-default delete-button" data-id="@item.FileId">
+                <i class="fa fa-trash-o"></i> Delete
+            </button>
+        </div>
+    </li>
+
+}
+</ul>
+
+<div class="modal fade" id="imageInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Image info</h4>
+                <p>
+                    The image title is used to increase the accessibility and search engine optimization. The image text will appear below the image.
+                </p>
+            </div>
+            <div class="modal-body">
+                <form name="ImageInfo" id="ImageInfo">
+	                <div class="form-group">
+                        <label for="ImageAlt" class="control-label">Image title</label>
+		                <input type="text" name="ImageAlt" id="ImageAlt" class="form-control" />
+	                </div>
+	                <div class="form-group">
+                        <label for="ImageText" class="control-label">Image text</label>
+		                <textarea name="ImageText" id="ImageText" class="form-control" rows="6"></textarea>
+	                </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="AddImageFrame" id="AddImageFrame" />
+                                Add image frame
+                            </label>
+                        </div>
+                    </div>
+	                <div class="form-group">
+		                <button type="button" id="imageInfoSubmit" class="btn btn-primary">Insert</button>
+                        <button type="button" id="imageInfoCancel" class="btn btn-default">Cancel</button>
+	                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+<script>
+    $(function () {
+
+        // handle clicks on the delete icon, send ajax call
+        $('.delete-button').click(function () {
+            $.ajax({
+                url: '/Admin/Files/Delete',
+                type: 'POST',
+                data: {
+                    id: $(this).attr('data-id')
+                }
+            }).done(function (data) {
+                if (data.success) {
+                    $('button[data-id=' + data.fileId + ']').parents('li').remove();
+                }
+            });
+        });
+
+    });
+    </script>
+
+@if (ViewBag.UsePopupLayout == true)
+{
+    <script>
+        $(function () {
+            //
+            // start code for inserting HTML to TinyMCE
+            var imageFileExt = [".jpg", ".png", ".gif", ".jpeg"];   // file extension that defines if it is an image
+            var insertCode;                                         // the code to insert in TinyMCE
+            var imageAlt = "", imageText = "";
+            var addClass = "article-image";
+
+            // on click, insert the link in tinymce
+            $('.file-link').each(function () {
+                $(this).click(function () {
+                    // if the file extension exists in the array, its an image
+            	    if ($.inArray($(this).attr('data-file-extension'), imageFileExt) > -1) {
+            		    // show the image info layer
+            		    $('#imageInfoModal').modal('show');
+            		
+            		    var imageSrc = $(this).attr('href');
+
+            		    $('#imageInfoSubmit').click(function () {
+            			    imageAlt = RemoveQuotes($('#ImageAlt').val());
+            		        imageText = RemoveQuotes(tinymce.get('ImageText').getContent());
+            			    
+            			    $('#imageInfoModal').modal('hide');
+
+            		        // check if the user wants a image frame
+            			    if ($('#AddImageFrame').is(':checked')) {
+            			        addClass += " frame";
+            			    }
+
+            			    insertCode = '<img src="' + imageSrc + '" alt="' + imageAlt + '" data-image-text="' + imageText + '" class="' + addClass + '" />';
+            			    //insertCode = '<figure><img src="' + imageSrc + '" alt="' + imageAlt + '" /><figcaption>' + imageText + '</figcaption></figure>';
+
+            			    // insert code to tinymce
+            			    window.opener.tinyMCE.execCommand('mceInsertContent', false, insertCode);
+            			    window.close();
+            		    });
+
+            		    $('#imageInfoCancel').click(function () {
+            		        $('#imageInfoModal').modal('hide');
+
+            			    document.location.reload();
+            		    });
+
+            		
+                    }
+                    // otherwise its a normal link to a file
+                    else {
+            		    insertCode = '<a href=\'' + $(this).attr('href') + '\' target=\'_blank\' />' + $(this).attr('href') + '</a>';
+
+            		    // insert code to tinymce
+            		    window.opener.tinyMCE.execCommand('mceInsertContent', false, insertCode);
+            		    window.close();
+                    }
+
+                    // prevent link from opening
+                    return false;
+                });
+            });
+        });
+
+        function RemoveQuotes(input) {
+            input = input.replace(/"/g, "&quot;");
+            input = input.replace(/"/g, "&quot;");
+            input = input.replace(/</g, '&lt;');
+            input = input.replace(/>/g, '&gt;');
+            return input;
+        }
+    </script>
+}
+}
+

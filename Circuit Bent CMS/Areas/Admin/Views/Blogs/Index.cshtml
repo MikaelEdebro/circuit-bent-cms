@@ -1,0 +1,62 @@
+@model IEnumerable<CircuitBentCMS.Models.Blog>
+
+@{
+    ViewBag.Title = "Blog";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+          <li class="active">Blog</li>
+        </ol>
+    </div>
+    <div class="col-sm-6 buttons">
+        <div class="btn-group">
+            <a href="/Admin/Blogs/Create" class="btn btn-default"><i class="fa fa-plus"></i> Create new post</a>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.ToList().Count > 0)
+{
+    <table class="table table-hover">
+        <tr>
+            <th class="action-buttons"></th>
+            <th>
+                Headline
+            </th>
+            <th class="hidden-xs">
+                Publish date
+            </th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td class="action-buttons">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="/Admin/Blogs/Edit/@item.BlogId"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/Blogs/Delete/@item.BlogId"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+			    @item.Headline
+            </td>
+            <td class="hidden-xs">
+			    @item.Date.ToString("g", new System.Globalization.CultureInfo("sv"))
+            </td>
+        </tr>
+    }
+    </table>
+}
+
+

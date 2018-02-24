@@ -1,0 +1,57 @@
+@model CircuitBentCMS.Models.StoreItem
+@{
+    ViewBag.Title = "Store › Add new item";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Store">Store</a></li>
+            <li class="active">Add new item</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="reset" class="btn btn-default">Clear</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts
+{
+<script>
+    $(function () {
+        // delete store image
+        $('.btn-delete-image').click(function () {
+            var clickedObject = $(this);
+            $.ajax({
+                url: "/Admin/Store/DeleteImage",
+                type: "POST",
+                data: {
+                    id: $(this).attr('data-id')
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $(clickedObject).parents('.col-xs-6').remove();
+                    }
+                },
+                error: function (result) {
+                    ShowStatusMessage('Could not delete image. Error message: ' + result.errorMessage, 'error', 5000);
+                }
+            });
+
+            return false;
+        });
+	});
+</script>
+}

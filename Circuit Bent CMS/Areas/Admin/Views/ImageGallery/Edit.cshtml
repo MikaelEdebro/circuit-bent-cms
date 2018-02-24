@@ -1,0 +1,30 @@
+@model CircuitBentCMS.Models.Image
+
+@{
+    ViewBag.Title = "Image gallery › Edit image";
+}
+
+<div class="row menu">
+    <div class="col-xs-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/ImageGallery">Image gallery</a></li>
+            <li class="active">Edit image</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "ImageGallery", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.ImageId)
+    @Html.HiddenFor(model => model.Order)
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="reset" class="btn btn-default">Undo</button>
+        </div>
+    </div>
+}

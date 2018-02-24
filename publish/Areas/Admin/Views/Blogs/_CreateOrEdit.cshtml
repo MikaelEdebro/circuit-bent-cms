@@ -1,0 +1,16 @@
+@model BandPage.Models.Blog
+
+@* This partial view defines form fields that will appear when creating and editing entities *@
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Headline)<br />
+    @Html.TextBoxFor(model => model.Headline, new { @class = "textboxFull", maxlength = "100" })
+    @Html.ValidationMessageFor(model => model.Headline)
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Text)<br />
+    @Html.TextAreaFor(model => model.Text, new { @class = "textareaBig" })
+    @Html.ValidationMessageFor(model => model.Text)
+</div>
+

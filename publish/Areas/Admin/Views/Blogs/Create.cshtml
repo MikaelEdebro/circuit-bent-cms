@@ -1,0 +1,24 @@
+@model BandPage.Models.Blog
+
+@{
+    ViewBag.Title = "Blog > New post";
+}
+
+<h1>Blog › New post</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-row">
+        <input type="submit" value="Publish now" />
+    </div>
+
+}
+<div>
+    @Html.ActionLink("Back to list", "Index")
+</div>
+
+

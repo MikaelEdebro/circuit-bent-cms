@@ -1,0 +1,30 @@
+﻿@model CircuitBentCMS.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Change password";
+}
+
+<div class="row menu">
+    <div class="col-xs-6">
+        <ol class="breadcrumb">
+            <li class="active">Change password</li>
+        </ol>
+    </div>
+</div>
+<p>
+    Here you can change your login password. We highly encourage you to select a strong password that matches these requirements:
+    <ul style="list-style: disc; list-style-position: inside; padding: 0 0 10px 20px;">
+        <li>Contain a minimum of 6 characters (the longer, the better).</li>
+        <li>Consist of a combination of numbers, big and small letters and special characters like _, ! etc.</li>
+        <li>Do not use words.</li>
+    </ul>
+</p>
+
+@if (ViewBag.HasLocalPassword)
+{
+    @Html.Partial("_ChangePasswordPartial")
+}
+else
+{ 
+    @Html.Partial("_SetPasswordPartial")
+}
+

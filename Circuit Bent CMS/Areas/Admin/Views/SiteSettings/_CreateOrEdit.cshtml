@@ -1,0 +1,58 @@
+@model CircuitBentCMS.Models.SiteSettings
+
+<div class="form-group">
+    <label for="Title" class="control-label col-sm-2">Site name</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+        
+            <span class="input-group-addon">
+                <img src="~/Images/icons/actions/info.png" alt="Info" title="The title of your site. This is what's being shown in the browser tab." class="info-icon" />
+            </span>
+        </div>
+        @Html.ValidationMessageFor(model => model.Title)
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="MetaDescription" class="control-label col-sm-2">Site description</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            @Html.TextAreaFor(model => model.MetaDescription, new { @class = "form-control", rows = "5" })
+        
+            <span class="input-group-addon">
+                <img src="~/Images/icons/actions/info.png" alt="Info" title="This is what shows up as a descripiton in Google and other search engines. If absent, it will look for the first text on the site." class="info-icon" />
+            </span>
+        </div>
+        @Html.ValidationMessageFor(model => model.MetaDescription)
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="FooterText" class="control-label col-sm-2">Footer content</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            @Html.TextAreaFor(model => model.FooterText, new { @class = "form-control", rows = "6" })
+        
+            <span class="input-group-addon">
+                <img src="~/Images/icons/actions/info.png" alt="Info" title="The text that appears in the footer." class="info-icon" />
+            </span>
+        </div>
+        @Html.ValidationMessageFor(model => model.FooterText)
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label for="GoogleAnalytics" class="control-label col-sm-2">Google Analytics</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            @Html.TextAreaFor(model => model.GoogleAnalytics, new { @class = "form-control", rows = "4" })
+        
+            <span class="input-group-addon">
+                <img src="~/Images/icons/actions/info.png" alt="Info" title="Paste the code you got from Google Analytics." class="info-icon" />
+            </span>
+        </div>
+        @Html.ValidationMessageFor(model => model.GoogleAnalytics)
+    </div>
+</div>

@@ -1,0 +1,140 @@
+@model IEnumerable<CircuitBentCMS.Models.Show>
+
+@{
+    ViewBag.Title = "Shows & Events";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+          <li class="active">Events</li>
+        </ol>
+    </div>
+    <div class="col-sm-6 buttons">
+        <div class="btn-group">
+            <a href="/Admin/Shows/Create" class="btn btn-default"><i class="fa fa-plus"></i> Create new event</a>
+        </div>
+    </div>
+</div>
+
+@if (Model.Where(a => a.Date > DateTime.Now).ToList().Count > 0)
+{
+    <table class="table table-hover">
+        <tr>
+            <th class="action-buttons"></th>
+            <th>
+                Event
+            </th>
+            <th class="hidden-xs">
+                Date
+            </th>
+            <th class="hidden-xs">
+                Venue
+            </th>
+        </tr>
+
+    @foreach (var item in Model.Where(a => a.Date > DateTime.Now)) {
+        <tr>
+            <td class="action-buttons">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="/Admin/Shows/Edit/@item.ShowId"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/Shows/Delete/@item.ShowId"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+                        </li>
+                        <li class="divider"></li>
+
+                        @if (item.Cancelled)
+                        {
+                            <li><a href="/Admin/Shows/ReinstateShow/@item.ShowId"><i class="fa fa-fw fa-check"></i> Reinstate event</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="/Admin/Shows/CancelShow/@item.ShowId"><i class="fa fa-fw fa-ban"></i> Cancel event</a></li>
+                        }
+                    </ul>
+                </div>
+
+            </td>
+            <td>
+                @if (item.Cancelled)
+                {
+                    <span class="show-cancelled">@item.Title</span> <span> (cancelled)</span>
+                }
+                else
+                {
+                    @item.Title
+                }
+            </td>
+            <td class="hidden-xs">
+                @item.Date.ToString("d", new System.Globalization.CultureInfo("sv"))
+            </td>
+            <td class="hidden-xs">
+			    @item.Venue
+            </td>
+        </tr>
+    }
+    </table>
+}
+
+@if (Model.Where(a => a.Date < DateTime.Now).ToList().Count > 0)
+{
+    <h2 style="margin-top: 30px;">Previous shows</h2>
+    <table class="table table-hover">
+        <tr>
+            <th class="action-buttons"></th>
+            <th>
+                Event
+            </th>
+            <th class="hidden-xs">
+                Date
+            </th>
+            <th class="hidden-xs">
+                Venue
+            </th>
+        </tr>
+
+    @foreach (var item in Model.Where(a => a.Date < DateTime.Now).OrderByDescending(a => a .Date))
+    {
+        <tr>
+            <td class="action-buttons">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="/Admin/Shows/Edit/@item.ShowId"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/Shows/Delete/@item.ShowId"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                @if (item.Cancelled)
+                {
+                    <span class="show-cancelled">@item.Title</span> <span> (cancelled)</span>
+                }
+                else
+                {
+                    @item.Title
+                }
+            </td>
+            <td class="hidden-xs">
+			    @item.Date.ToString("d", new System.Globalization.CultureInfo("sv"))
+            </td>
+            <td class="hidden-xs">
+			    @item.Venue
+            </td>
+        </tr>
+    }
+    </table>
+}
+

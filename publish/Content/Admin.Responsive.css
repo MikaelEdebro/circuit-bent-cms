@@ -1,0 +1,32 @@
+﻿/* TinyMCE responsive */
+.mceEditor table {
+max-width:none; /* Bug in computation of fullscreen */
+}
+
+.mceEditor table.mceLayout {
+width:100% !important;
+height:auto !important;
+} 
+
+table.mceToolbar { float:left; }
+body .mceToolbar div {
+white-space:normal;
+}
+
+@media all and (max-width: 880px)
+{
+    .body { width: 100%; }
+
+     
+}
+
+@media all and (max-width: 600px)
+{
+    .body { width: 100%; padding: 30px 10px; }
+    #logout { margin: -25px -5px 0 0; }
+    .table-hide { display: none; }
+    th, td { padding: 5px; }
+    
+    label { display: block; }
+     
+}

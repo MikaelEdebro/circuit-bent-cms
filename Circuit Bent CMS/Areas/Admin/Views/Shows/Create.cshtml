@@ -1,0 +1,29 @@
+@model CircuitBentCMS.Models.Show
+
+@{
+    ViewBag.Title = "Shows › Create";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Shows">Events</a></li>
+            <li class="active">Create new event</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("Create", "Shows", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Create event</button>
+            <button type="reset" class="btn btn-default">Clear</button>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,153 @@
+﻿@model CircuitBentCMS.Models.NavigationViewModel
+<div class="nav-inner">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @if (!String.IsNullOrEmpty(Model.MobileImage))
+        {
+            <a class="navbar-brand" href="/"><img src="~/Images/PageSettings/@Model.MobileImage" alt="Mobile logo" /></a>
+        }
+    </div>
+
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+
+            @foreach (var item in Model.Pages.Where(a => a.SubPageToPageId == 0))
+            {
+                int subPageCount = Model.Pages.Where(a => a.SubPageToPageId == item.PageId).ToList().Count;
+            
+                <li @if (subPageCount > 0) { <text>class="dropdown"</text> }>
+                    @if (!String.IsNullOrEmpty(item.CustomPage))
+                    {
+                        // if it's a custom page we add the fixed route
+                        string url = "#";
+                        string urlTarget = String.Empty;
+
+                        // check what type of page it is and link correspondingly
+                        switch (item.CustomPage)
+                        {
+                            case "shop":
+                                url = "/shop";
+                                break;
+                            case "events":
+                                url = "/events";
+                                break;
+                            case "blog":
+                                url = "/blog";
+                                break;
+                            case "imagegallery":
+                                url = "/gallery";
+                                break;
+                            case "externallink":
+                                url = item.ExternalLinkUrl;
+                                urlTarget = "_blank";
+                                break;
+                        }
+
+                        // if the page has subpages we need to link it to the dropdown list
+                        if (subPageCount > 0)
+                        {
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @item.Title <span class="caret"></span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@url" target="@urlTarget">
+                                @item.Title
+                            </a>
+                        }
+                    
+                    }
+                    else
+                    {
+                        // if the page is set as home page
+                        if (item.HomePage)
+                        {
+                            // if the page has subpages we need to link it to the dropdown list
+                            if (subPageCount > 0)
+                            {
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    @item.Title  <span class="caret"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/">
+                                    @item.Title
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            // if the page has subpages we need to link it to the dropdown list
+                            if (subPageCount > 0)
+                            {
+                                <a href="/@CircuitBentCMS.Models.CustomHelpers.CreateSlug(item.Title)" class="dropdown-toggle" data-toggle="dropdown">
+                                    @item.Title  <span class="caret"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/@CircuitBentCMS.Models.CustomHelpers.CreateSlug(item.Title)">
+                                    @item.Title
+                                </a>
+                            }
+                        }
+                    }
+                    @if (subPageCount > 0)
+                    {
+                        <ul class="dropdown-menu">
+                            @foreach (var sub in Model.Pages.Where(a => a.SubPageToPageId == item.PageId))
+                            {
+                                <li>
+                                    @if (!String.IsNullOrEmpty(sub.CustomPage))
+                                    {
+                                        // if it's a custom page we add the fixed route
+                                        string url = "#";
+                                        string urlTarget = String.Empty;
+
+                                        // check what type of page it is and link correspondingly
+                                        switch (sub.CustomPage)
+                                        {
+                                            case "shop":
+                                                url = "/shop";
+                                                break;
+                                            case "events":
+                                                url = "/events";
+                                                break;
+                                            case "blog":
+                                                url = "/blog";
+                                                break;
+                                            case "imagegallery":
+                                                url = "/gallery";
+                                                break;
+                                            case "externallink":
+                                                url = item.ExternalLinkUrl;
+                                                urlTarget = "_blank";
+                                                break;
+                                        }
+                                        <a href="@url" target="@urlTarget">
+                                            @sub.Title
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/@CircuitBentCMS.Models.CustomHelpers.CreateSlug(item.Title)/@CircuitBentCMS.Models.CustomHelpers.CreateSlug(sub.Title)">
+                                            @sub.Title
+                                        </a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>

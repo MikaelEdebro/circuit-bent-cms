@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        @if (!String.IsNullOrEmpty(ViewBag.Title))
+        {
+            <title>@ViewBag.Title | Manage site</title>
+        }
+        else
+        {
+            <title>Manage site</title>
+        }
+
+        <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+
+        @Styles.Render("~/bundles/css/admin/components")
+        @Styles.Render("~/bundles/css/admin")    
+    </head>
+    <body>
+        <header>
+            
+            <!-- Main navigation
+            =========================================================-->
+            <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                        <div class="navbar-brand hidden-sm">
+                            <a href="/Admin">Circuit Bent CMS</a>
+                        </div>
+                    </div>
+
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Manage content <b class="caret"></b>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a href="/Admin/Blogs">Blog</a></li>
+                                    <li><a href="/Admin/Shows">Events</a></li>
+                                    <li><a href="/Admin/Store">Store</a></li>
+                                    <li><a href="/Admin/Pages">Pages</a></li>
+                                    <li><a href="/Admin/SocialMedia">Social media</a></li>
+                                    <li><a href="/Admin/ImageGallery">Image gallery</a></li>
+                                    <li><a href="/Admin/ImageSlider">Image slider</a></li>
+                                    <li><a href="/Admin/Files">File manager</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/Admin/SiteDesign">
+                                    Design
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Settings <b class="caret"></b>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a href="/Admin/SiteSettings">Site settings</a></li>
+                                    <li><a href="/Admin/MailSettings">Mail settings</a></li>
+                                    <li><a href="/Admin/Account/Manage">Change password</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/" target="_blank">
+                                    Go to site
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="http://circuitbentstudios.se/support" target="_blank">
+                                    Support
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <div class="container body">
+            @RenderBody()
+        </div>
+        
+        
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+            @Html.AntiForgeryToken()
+        }
+        
+        <!-- Include jQuery and fallback -->
+        @Scripts.Render("~/bundles/scripts/jquery")
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='/Scripts/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+            }
+        </script>
+
+        @Scripts.Render("~/bundles/scripts/jqueryui")
+        @Scripts.Render("~/bundles/scripts/jqueryval")
+
+        @Scripts.Render("~/bundles/scripts/admin/components")
+
+        <script src="http://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+
+        @Scripts.Render("~/bundles/scripts/admin")
+
+        @RenderSection("Scripts", false)
+
+        @if (!String.IsNullOrEmpty(Convert.ToString(TempData["StatusMessage"])) || !String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+        {
+            <script>
+                $(function () {
+                    var message = '@Html.Raw(TempData["StatusMessage"])';
+                    var type = 'notice';
+                    var duration = 2000;
+                
+                @if (TempData["MessageDuration"] != null)
+                {
+                    <text>duration = @(TempData["MessageDuration"]);</text>
+                }
+                
+                @if (!String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+                {
+                    <text>message = '@(Html.Raw(TempData["ErrorMessage"]))';</text>
+                    <text>type = 'error';</text>
+                    <text>duration = 5000;</text> 
+                }
+                    ShowStatusMessage(message, type, duration);
+                });
+            </script>
+        }
+
+    </body>
+</html>

@@ -1,0 +1,36 @@
+@model BandPage.Models.SocialMedia
+
+@{
+    ViewBag.Title = "Social media";
+
+    // check if update or post new
+    string newOrUpdate = "Edit";
+
+    if (Model == null)
+    {
+        newOrUpdate = "Create";
+    }
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<h1>Social media</h1>
+<p>
+    These will end up as icons on the home page.
+</p>
+
+@using (Html.BeginForm(newOrUpdate, "SocialMedia", FormMethod.Post)) {
+    @Html.ValidationSummary(true)
+    
+    if (Model != null)
+    {
+        @Html.HiddenFor(model => model.SocialMediaId)
+    }
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-row">
+        <label></label><input type="submit" value="Save changes" />
+    </div>
+    
+}

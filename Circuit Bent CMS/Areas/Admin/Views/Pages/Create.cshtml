@@ -1,0 +1,129 @@
+@model CircuitBentCMS.Models.Page
+
+@{
+    ViewBag.Title = "Pages › Create new page";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Pages">Pages</a></li>
+            <li class="active">Create new page</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("Create", "Pages", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+	@Html.Partial("_CreateOrEdit", Model)
+
+    if (!String.IsNullOrEmpty(Request.QueryString["subpage"]))
+    {
+        <input type="hidden" name="SubPageToPageId" value="@Request.QueryString["subpage"]" />
+    }
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts
+{
+@Styles.Render("~/bundles/css/codemirror")
+@Scripts.Render("~/bundles/scripts/codemirror")
+
+<script>
+    $(function () {
+        $('a[href="#sidebar"]').on('shown.bs.tab', function (e) {
+           // init TinyMCE with full menu bars
+            tinymce.init({
+                mode: "exact",
+                elements: "SideBarContent",
+                statusbar: false,
+                relative_urls: false,
+                remove_linebreaks: false,
+                entity_encoding: "raw",
+                content_css: "/Content/bootstrap/css/bootstrap.min.css,/Content/TinyMce.css?" + new Date().getTime(),
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime table contextmenu paste media"
+                ],
+                toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | insertfiles",
+                setup: function (editor) {
+                    editor.addButton('insertfiles', {
+                        text: 'Insert image',
+                        icon: true,
+                        image: '/Images/icons/actions/file_(add)_16x16.gif',
+                        onclick: function () {
+                            OpenInsertFiles();
+                        }
+                    });
+                }
+            });
+        });
+
+        $('a[href="#widgets"]').on('shown.bs.tab', function (e) {
+            // init TinyMCE with small menu
+            tinymce.init({
+                mode: "exact",
+                elements: "WidgetArea1, WidgetArea2, WidgetArea3, WidgetArea4",
+                statusbar: false,
+                relative_urls: false,
+                remove_linebreaks: false,
+                entity_encoding: "raw",
+                content_css: "/Content/bootstrap/css/bootstrap.min.css,/Content/TinyMce.css?" + new Date().getTime(),
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime table contextmenu paste media"
+                ],
+                toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image | insertfiles",
+                setup: function (editor) {
+                    editor.addButton('insertfiles', {
+                        text: 'Insert image',
+                        icon: true,
+                        image: '/Images/icons/actions/file_(add)_16x16.gif',
+                        onclick: function () {
+                            OpenInsertFiles();
+                        }
+                    });
+                }
+            });
+        });
+
+        // init codemirror for the scripts textarea
+        var myCssMirror = CodeMirror.fromTextArea(document.getElementById('Scripts'), {
+            lineNumbers: false,
+            mode: "xml",
+            indentUnit: 4
+        });
+
+        // delete social media image
+        $('.btn-delete-image').click(function () {
+            $.ajax({
+                url: "/Admin/Pages/DeleteSocialMediaImage",
+                type: "POST",
+                data: {
+                    id: $(this).attr('data-id')
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $('.social-media-image').remove();
+                    }
+                },
+                error: function (result) {
+                    ShowStatusMessage('Something went wrong. Error message: ' + result.errorMessage, 'error', 5000);
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
+}

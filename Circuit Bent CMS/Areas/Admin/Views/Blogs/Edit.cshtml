@@ -1,0 +1,31 @@
+@model CircuitBentCMS.Models.Blog
+
+@{
+    ViewBag.Title = "Blog > Edit post";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Blogs">Blog</a></li>
+            <li class="active">Edit post</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "Blogs", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    
+    @Html.HiddenFor(model => model.BlogId)
+    @Html.HiddenFor(model => model.Date)
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="reset" class="btn btn-default">Undo</button>
+        </div>
+    </div>
+    
+}

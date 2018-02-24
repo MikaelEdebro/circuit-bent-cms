@@ -1,0 +1,73 @@
+﻿@model CircuitBentCMS.Models.StoreItem
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="row store-details">
+    <div class="col-sm-4 store-left">
+        @foreach (var image in Model.StoreItemImages)
+        {
+            <a href="~/Images/Store/@image.ImageUrl" class="fancybox" rel="group1">
+                <img src="~/Images/Store/thumb_@image.ImageUrl" alt="@image.ImageUrl" class="store-thumb" />
+            </a>
+        }
+    </div>
+    <div class="col-sm-8 store-right">
+        <h2>@Model.Title</h2>
+        @Html.Raw(Model.Description)
+
+        @if (!String.IsNullOrEmpty(Model.Price))
+        {
+            <h3>
+                @Model.Price
+            </h3>
+        }
+        @if (!String.IsNullOrEmpty(Model.PaypalCode))
+        {
+            <p>
+                @Html.Raw(Model.PaypalCode)
+            </p>
+        }
+    </div>
+</div>
+
+
+    
+@if (!String.IsNullOrEmpty(Model.Title))
+{
+    <text>
+        @section MetaSocialMediaTitle {
+            <meta property="og:title" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Title, 95, false), false)" />
+            <meta itemprop="name" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Title, 140, false), false)">
+            <meta name="twitter:title" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Title, 70, false), false)">
+        }
+    </text>
+}
+@if (!String.IsNullOrEmpty(Model.Description))
+{
+    <text>
+        @section MetaDescription {
+            <meta name="description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Description, 297, false), false)" />
+        }
+    </text>
+    
+    <text>
+        @section MetaSocialMediaDescription {
+            <meta property="og:description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Description, 297, false), false)" />
+            <meta itemprop="description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Description, 185, false), false)">
+            <meta name="twitter:description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Description, 200, false), false)">
+        }
+    </text>
+    
+}
+@if (Model.StoreItemImages.Count > 0)
+{
+    <text>
+        @section MetaSocialMediaImage {
+            <meta property="og:image" content="@(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host)/Images/Store/@Model.StoreItemImages.FirstOrDefault().ImageUrl" />
+            <meta itemprop="image" content="@(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host)/Images/Store/@Model.StoreItemImages.FirstOrDefault().ImageUrl">
+            <meta name="twitter:image:src" content="@(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host)/Images/Store/@Model.StoreItemImages.FirstOrDefault().ImageUrl">
+        }
+    </text>
+    
+}

@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Custom code";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li class="active">Custom code</li>
+        </ol>
+    </div>
+</div>
+<p>
+    Here you can override the default styling of the page elements, and add your own custom content. 
+    It is recommended that you only use this feature if you have sufficient knowledge of HTML/CSS.
+</p>
+
+@using (Html.BeginForm("CustomCss", "SiteDesign", FormMethod.Post, new { id = "mainForm" }))
+{
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div> 
+    <div class="form-group">
+        <label for="CustomCss">CSS:</label>
+        <textarea name="CustomCss" id="CustomCss" placeholder="CSS code" class="form-control">@ViewBag.CustomCss</textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>  
+    <div class="form-group">
+        <label for="CustomHtml">HTML & JavaScript:</label>
+        <textarea name="CustomHtml" id="CustomHtml" cols="20" rows="10" placeholder="HTML code" class="form-control">@ViewBag.CustomHtml</textarea>
+    </div>
+    <div class="form-row">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>  
+}
+
+@section Scripts
+{
+@Styles.Render("~/bundles/css/codemirror")
+@Scripts.Render("~/bundles/scripts/codemirror")
+<script>
+    var myCssMirror = CodeMirror.fromTextArea(document.getElementById('CustomCss'), {
+        lineNumbers: false,
+        mode: "css",
+        indentUnit: 4
+    });
+    var myHtmlMirror = CodeMirror.fromTextArea(document.getElementById('CustomHtml'), {
+        lineNumbers: false,
+        mode: "xml",
+        indentUnit: 4
+    });
+</script>
+}

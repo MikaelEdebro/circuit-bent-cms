@@ -1,0 +1,351 @@
+@import 'Mixins';
+
+/* Variables
+======================*/
+$pink: #d4003c;
+
+html, body {
+	height: 100%;
+}
+body {
+}
+a {
+	
+	&:hover { text-decoration: none; }
+}
+
+form {
+	max-width: 1000px;
+}
+
+.navbar, h1,h2,h3,h4,h5 {
+	font-family: 'open_sanslight';
+	font-weight: normal;
+}
+.input-group-addon {
+	background: #72a1ff;
+}
+
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #e80c4d;
+    font-weight: bold;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #e80c4d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.body {
+	padding: 70px 20px 20px 20px;
+	min-height: 100%;
+}
+
+.menu {
+	margin-bottom: 10px;
+
+	.buttons {
+		text-align: right;
+	}
+}
+
+
+/* NAVIGATION
+==================================*/
+.breadcrumb {
+	font-size: 1.25em;
+	font-family: 'open_sanslight';
+	text-transform: uppercase;
+	background: none;
+	padding: 0;
+}
+
+
+.quick-link {
+	background: rgba(0,0,0,.01);
+	display: block;
+	@include border(.1);
+	@include border-radius(10px);
+	padding: 20px 0;
+	text-align: center;
+	margin: 20px 0;
+
+	&:hover {
+		background: rgba(0,0,0,.02);
+		@include box-shadow(6px, .08);
+	}
+}
+
+
+.sortable {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	text-indent: 0;
+}
+.file-list {
+	@extend .sortable;
+	@include word-wrap;
+}
+
+
+/* EVENTS
+==================================*/
+.show-cancelled {
+	text-decoration: line-through;
+}
+
+
+/* STORE
+==================================*/
+.store-item {
+	font-size: 12px;
+	padding: 8px;
+	@include border(.1);
+	@include border-radius(6px);
+	text-align: center;
+	margin-bottom: 20px;
+	background: #fff;
+
+	.image {
+		position: relative;
+		height: 140px;
+		margin-bottom: 8px;
+
+		.helper {
+			display: inline-block;
+			height: 100%;
+			vertical-align: middle;
+			width: 1px;
+		}
+		img {
+			max-height: 100%;
+			max-width: 95%;
+			margin-left: -1px;
+			vertical-align: middle;
+		}
+	}
+	.info {
+		min-height: 50px;
+	}
+	.action .dropdown-menu {
+		text-align: left;
+	}
+}
+.existing-images {
+	margin: 20px 0;
+	font-size: 10px;
+
+	.thumbnail {
+		text-align: center;
+		height: 230px;
+
+		img {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 100%;
+			max-height: 140px;
+		}
+	}
+}
+
+/* PAGES
+===========================*/
+$pageHeight: 40px;
+
+.page {
+	position: relative;
+	@include border(.08);
+	margin: 10px 0;
+	padding: 4px 10px;
+	line-height: $pageHeight;
+	@include border-radius(6px);
+
+	.expand {
+		float: left;
+		height: 100%;
+		margin-right: 6px;
+		font-size: 20px;
+	}
+	.info {
+		float: left;
+		h3 {
+			margin: 0;
+		}
+	}
+	.icons {
+		float: right;
+		font-size: 20px;
+
+		i {
+			margin: 0 5px;
+			cursor: pointer;
+		}
+	}
+}
+.sub-page {
+	margin-left: 40px;
+	.info {
+		padding: 0;
+	}
+}
+.set-homepage {
+	opacity: .3;
+	cursor: pointer;
+}
+.disabled {
+	opacity: .3;
+	cursor: auto !important;
+}
+
+.nav-tabs .submit-button {
+	float: right;
+}
+.social-media-image {
+	max-width: 400px;
+	height: auto;
+	text-align: center;
+}
+
+
+/* LOGIN PAGE
+===================================*/
+.login-page {
+}
+.login-form {
+	background: white;
+	max-width: 300px;
+	margin: 20px auto;
+	@include border(.2);
+	@include box-shadow(20px, .15);
+
+	.logo {
+		background: $pink;
+		text-align: center;
+		padding: 20px;
+	}
+
+	form {
+		margin: 20px auto;
+	}
+}
+
+
+/* IMAGE SLIDER
+===============================*/
+.image-slider {
+	@include border(.1);
+	background: rgba(0,0,0,.01);
+	padding: 15px;
+	margin: 0 0 20px 0;
+
+	.delete-slider {
+		float: right;
+	}
+
+	.slide {
+		background: white;
+		margin-bottom: 10px;
+		padding: 10px;
+		@include border(.1);
+	}
+	.image, .info {
+		float: left;
+	}
+	.image {
+		margin-right: 6px;
+	}
+	.info {
+		max-width: 230px;
+	}
+	.icons {
+		float: right;
+	}
+}
+
+
+/* FILE MANAGER
+=====================================*/
+#ImageInfo {
+	
+}
+
+
+/* DESIGN
+====================================*/
+.preview {
+	padding: 0 20px;
+	@include border(.2);
+
+	.header, .footer {
+		text-align: center;
+
+		img {
+			max-width: 100%;
+		}
+	}
+	.header {
+		margin-bottom: 10px;
+	}
+	.footer {
+		margin-top: 10px;
+	}
+}
+.text-container {
+	padding: 20px;
+	font-size: 0.8em;
+}
+.colorSelector {
+	width: 50px;
+	height: 50px;
+	z-index: 100;
+	background: white;
+	padding: 5px;
+	@include border-radius(6px);
+	@include border(.2);
+
+	div {
+		width: 100%;
+		height: 100%;
+	}
+}
+.design-image {
+	text-align: center;
+}
+
+
+
+/* MISC
+===============================*/
+.table .action-buttons {
+	width: 90px;
+}
+
+
+/* RESPONSIVE
+===============================*/
+@media all and (max-width: 768px) {
+	.menu .buttons {
+		text-align: left;
+	}
+}

@@ -1,0 +1,23 @@
+@model CircuitBentCMS.Models.Show
+
+@{
+    ViewBag.Title = "Events › Delete event";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Shows">Events</a></li>
+            <li class="active">Delete event</li>
+        </ol>
+    </div>
+</div>
+
+<p>Are you sure you want to delete the event "<b>@Model.Title"</b></p>
+
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-primary">Delete</button>
+    <a href="/Admin/Shows" class="btn btn-default">Back to list</a>
+}
+
+

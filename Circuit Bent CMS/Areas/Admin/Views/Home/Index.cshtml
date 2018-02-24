@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="row menu">
+    <div class="col-xs-12">
+        <h1>Manage site</h1>
+        <p>
+            Welcome to the admin section of your web site.
+            You will find the different sections in the menu. For the most common tasks you can use the quick links below.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <a href="/Admin/Blogs/Create" class="quick-link">
+            <img src="~/Images/icons/admin/sub-blog-color.png" alt="Add blog post" />
+            <h3>Add blog post</h3>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="/Admin/Shows/Create" class="quick-link">
+            <img src="~/Images/icons/admin/sub-events-color.png" alt="Add show" />
+            <h3>Add show</h3>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="/Admin/Pages/Create" class="quick-link">
+            <img src="~/Images/icons/admin/add-page.png" alt="Add page" />
+            <h3>Add page</h3>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="/Admin/Store/Create" class="quick-link">
+            <img src="~/Images/icons/admin/sub-store-color.png" alt="Add store item" />
+            <h3>Add store item</h3>
+        </a>
+    </div>
+</div>

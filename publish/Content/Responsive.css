@@ -1,0 +1,22 @@
+﻿
+
+@media all and (max-width: 700px)
+{
+    nav ul { display: block; }
+    nav ul li { display: block; }
+    nav ul li a { width: 100%; }
+    
+    .column-left { clear: both; width: 100%; }
+    .column-right { clear: both; width: 100%; }
+    
+    .shows { margin-top: 30px; }
+    .social-media { text-align: center; }
+     
+}
+
+
+@media all and (max-width: 500px)
+{
+    #body { width: 100%; padding: 15px; }
+     
+}

@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Manage site - @ViewBag.Title</title>
+
+        <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+
+        @Styles.Render("~/bundles/css/admin/components")
+        @Styles.Render("~/bundles/css/admin")    
+                
+    </head>
+    <body style="padding-top: 10px">
+        <div class="container">
+            @RenderBody()
+        </div>
+        
+
+        <!-- Include jQuery and fallback -->
+        @Scripts.Render("~/bundles/scripts/jquery")
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='/Scripts/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+            }
+        </script>
+
+        @Scripts.Render("~/bundles/scripts/jqueryui")
+        @Scripts.Render("~/bundles/scripts/jqueryval")
+
+        @Scripts.Render("~/bundles/scripts/admin/components")
+
+        <script src="http://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+
+        @Scripts.Render("~/bundles/scripts/admin")
+
+        @RenderSection("Scripts", false)
+
+        @if (!String.IsNullOrEmpty(Convert.ToString(TempData["StatusMessage"])) || !String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+        {
+            <script>
+                $(function () {
+                    var message = '@Html.Raw(TempData["StatusMessage"])';
+                    var type = 'notice';
+                    var duration = 2000;
+                
+                @if (TempData["MessageDuration"] != null)
+                {
+                    <text>duration = @(TempData["MessageDuration"]);</text>
+                }
+                
+                @if (!String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+                {
+                    <text>message = '@(Html.Raw(TempData["ErrorMessage"]))';</text>
+                    <text>type = 'error';</text>
+                    <text>duration = 5000;</text> 
+                }
+                    ShowStatusMessage(message, type, duration);
+                });
+            </script>
+        }
+    </body>
+</html>

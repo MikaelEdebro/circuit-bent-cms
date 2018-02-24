@@ -1,0 +1,50 @@
+﻿@model CircuitBentCMS.Models.ImageGalleryViewModel
+@{
+    ViewBag.Title = ViewBag.PageTitle;
+}
+
+<h1>@ViewBag.PageTitle</h1>
+
+@if (Model.Images.Count > 0)
+{
+    string imageTitle = string.Empty;
+    
+    if (Model.ImageGallerySettings.ImageGalleryStyle == "slider")
+    {    
+        <ul class="bxslider">
+            @foreach (var image in Model.Images)
+            {
+                imageTitle = image.Title;
+                if (!String.IsNullOrEmpty(image.Photographer))
+                {
+                    if (String.IsNullOrEmpty(imageTitle)) { imageTitle += "Photo: " + image.Photographer; }
+                    else { imageTitle += "\nPhoto: " + image.Photographer; }
+                }
+                if (!String.IsNullOrEmpty(image.PhotographerUrl)) { imageTitle += " (" + image.PhotographerUrl + ")"; }
+                <li>
+                    <img src="~/Images/ImageGallery/@image.ImageUrl" alt="@image.Title" title="@imageTitle"  />
+                </li> 
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var image in Model.Images)
+            {
+                imageTitle = image.Title;
+                if (!String.IsNullOrEmpty(image.Photographer))
+                {
+                    if (String.IsNullOrEmpty(imageTitle)) { imageTitle += "Photo: " + image.Photographer; }
+                    else { imageTitle += "\nPhoto: " + image.Photographer; }
+                }
+                if (!String.IsNullOrEmpty(image.PhotographerUrl)) { imageTitle += " (" + image.PhotographerUrl + ")"; }
+                <div class="col-sm-3">
+                    <a href="~/Images/ImageGallery/@image.ImageUrl" class="fancybox thumbnail gallery-thumb" rel="group1">
+                        <img src="~/Images/ImageGallery/thumb_@image.ImageUrl" alt="@image.Title" title="@imageTitle" />
+                    </a>
+                </div>
+            }
+        </div>
+    }
+}

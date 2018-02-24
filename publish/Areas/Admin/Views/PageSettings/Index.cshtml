@@ -1,0 +1,25 @@
+@model BandPage.Models.PageSettings
+
+@{
+    ViewBag.Title = "Site configuration";
+}
+
+<h1>Site configuration</h1>
+<p>
+    Here you can configure some basic settings of your site. Hover over the info icon on each item for more details.
+</p>
+
+@using (Html.BeginForm("Edit", "PageSettings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    
+    if (Model != null)
+    {
+        @Html.HiddenFor(model => model.PageSettingsId)
+    }
+        
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <input type="submit" value="Save changes" />
+
+}

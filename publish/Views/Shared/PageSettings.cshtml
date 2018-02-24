@@ -1,0 +1,131 @@
+﻿@{
+    var context = new BandPage.Models.BandPageContext();
+    var pageSettings = context.PageSettings.FirstOrDefault();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@pageSettings.Title - @ViewBag.Title</title>
+    @if (String.IsNullOrEmpty(pageSettings.Favicon))
+    {
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    }
+    else
+    {
+        <link href="~/Images/PageSettings/@pageSettings.Favicon" rel="shortcut icon" type="image/x-icon" />
+    }
+
+    <meta name="viewport" content="width=device-width" />
+
+    <meta name="description" content="@pageSettings.MetaDescription" />
+    <meta name="keywords" content="@pageSettings.MetaKeywords" />
+
+    <link rel="stylesheet" href="~/Content/Reset.css" />
+    <!--<link rel="stylesheet" href="~/Content/fonts/Fonts.css" />-->
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/Responsive.css" />
+    <link href='http://fonts.googleapis.com/css?family=Old+Standard+TT:400,700' rel='stylesheet' type='text/css'>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+    <!-- toastmessage -->
+    <script src="~/Scripts/toastmessage/src/main/javascript/jquery.toastmessage.js"></script>
+    <link href="~/Scripts/toastmessage/src/main/resources/css/jquery.toastmessage.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        $(function () {
+            // show current menu object highlighted
+            var url = window.location.pathname;
+            var checkString;
+
+            // now grab every link from the navigation
+            $('nav a').each(function () {
+                // and test its href against the url pathname
+                checkString = url.match($(this).attr('href'));
+                if ((checkString != null && $(this).attr('href') != '/') || (url == $(this).attr('href'))) {
+                    $(this).addClass('current');
+                }
+            });
+
+            // Find all YouTube videos
+            var $allVideos = $("iframe[src^='http://player.vimeo.com'], iframe[src^='http://www.youtube.com']"),
+
+            // The element that is fluid width
+            // if the .column-left exists, we are on the home page, otherwise use the #body wrapper
+            $fluidEl = ($('.column-left').length > 0 ? $(".column-left") : $('#body'));
+
+            // Figure out and save aspect ratio for each video
+            $allVideos.each(function () {
+
+                        $(this)
+                            .data('aspectRatio', this.height / this.width)
+
+                            // and remove the hard coded width/height
+                            .removeAttr('height')
+                            .removeAttr('width');
+
+                    });
+
+                    // When the window is resized
+                    $(window).resize(function () {
+
+                        var newWidth = $fluidEl.width();
+
+                        // Resize all videos according to their own aspect ratio
+                        $allVideos.each(function () {
+
+                        var $el = $(this);
+                        $el
+                            .width(newWidth)
+                            .height(newWidth * $el.data('aspectRatio'));
+
+                        });
+
+                        // Kick off one resize to fix all videos on page load
+                    }).resize();
+
+        });
+    </script>
+
+    <style>
+    body 
+    {
+        background-color: #@pageSettings.BackgroundColor;
+        background-image: url(@Url.Content("~/Images/PageSettings/" + pageSettings.BackgroundImage));
+        background-repeat: repeat;
+    }
+    </style>
+
+    <script>
+        $(function () {
+            // insert footer text
+            $('footer').html('@Html.Raw(pageSettings.FooterText)');
+
+            @if (!String.IsNullOrEmpty(pageSettings.FooterImage))
+            {
+                <text>$('#footer-image').html('<img src="/Images/PageSettings/@pageSettings.FooterImage" />');</text>
+            }
+        });
+    </script>
+    
+
+</head>
+<body>
+    
+    <div id="fb-root"></div>
+    <script>    (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/sv_SE/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        } (document, 'script', 'facebook-jssdk'));</script>
+    
+    <header>
+        @if (!String.IsNullOrEmpty(pageSettings.HeaderImage))
+        {
+            <a href="/"><img src="~/Images/PageSettings/@pageSettings.HeaderImage" alt="@pageSettings.Title" /></a>
+        }
+    </header>

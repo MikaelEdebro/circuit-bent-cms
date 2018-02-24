@@ -1,0 +1,91 @@
+﻿@model CircuitBentCMS.Models.EventViewModel
+
+@{
+    
+    // if page doesn't exist, use the generic page title
+    ViewBag.Title = (Model.PageInfo == null) ? "Events" : Model.PageInfo.Title;
+}
+
+<h1>@ViewBag.Title</h1>
+
+@if (Model.Events.Count == 0)
+{
+    <em>@Resources.Views.Events.NoEvents</em>
+}
+
+@foreach (var item in Model.Events.Where(a => a.Date > DateTime.Now).OrderBy(a => a.Date))
+{
+    <div class="event-big clearfix">
+        <div class="date">
+            <div class="separate"><h4>@item.Date.Day</h4></div>
+            <div><h4>@item.Date.ToString("MMM", System.Globalization.CultureInfo.InvariantCulture)</h4></div> 
+        </div>
+        
+        <div class="info">
+            @if (!item.Cancelled)
+            {
+                if (!String.IsNullOrEmpty(item.LinkToEvent))
+                {
+                    <a href="@item.LinkToEvent" target="_blank"><b>@item.Title</b></a>
+                }
+                else
+                {
+                    <b>@item.Title</b>
+                }
+
+                if (!String.IsNullOrEmpty(item.Venue))
+                {
+                    <br /><span>Venue: </span>@item.Venue
+                }
+            
+                if (!String.IsNullOrEmpty(item.Time))
+                {
+                    <br /><span>Time: </span>@item.Time
+                }
+            
+                if (!String.IsNullOrEmpty(item.Price))
+                {
+                    <br /><span>Price: </span>@item.Price
+                }
+            }
+            else
+            {
+                <span class="show-cancelled">@item.Title, @item.Venue</span><br /><span> @Resources.Views.Events.Cancelled</span>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.Events.Where(a => a.Date < DateTime.Now).ToList().Count > 0)
+{
+    <h3 style="margin-top: 30px;">@Resources.Views.Events.PreviousEvents</h3>
+
+    foreach (var item in Model.Events.Where(a => a.Date < DateTime.Now).OrderByDescending(a => a.Date))
+    {
+        if (!String.IsNullOrEmpty(item.LinkToEvent))
+        {
+            <p>
+                <span class="previous-date">@item.Date.ToString("d", new System.Globalization.CultureInfo("sv"))</span>
+                <a href="@item.LinkToEvent" target="_blank">@item.Title</a>, @item.Venue
+            </p>
+        }
+        else
+        {
+            <p>
+                <span class="previous-date">@item.Date.ToString("d", new System.Globalization.CultureInfo("sv"))</span>
+                @item.Title, @item.Venue
+            </p>
+        }
+    }
+}
+
+@section Scripts
+{
+    @if (Model.PageInfo != null)
+    {
+        if (!String.IsNullOrEmpty(Model.PageInfo.Scripts))
+        {
+            @Html.Raw(Model.PageInfo.Scripts)
+        }
+    }
+}

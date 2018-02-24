@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BandPage.Models.StoreItem>
+@{
+    ViewBag.Title = "Store";
+}
+
+@foreach (var item in Model)
+{
+    <div class="store-item">
+        <div class="image">
+            <img src="@Url.Content("~/Images/Store/" + item.ImageUrl)" />
+        
+        </div>
+        <div class="info">
+            <h3>@item.Title</h3>
+            @if (!String.IsNullOrEmpty(item.Description))
+            {
+                @item.Description<br>
+            }
+            @if (!String.IsNullOrEmpty(item.Colors))
+            {
+                <text>Colors: </text>@item.Colors<br>
+            }
+            @if (!String.IsNullOrEmpty(item.Sizes))
+            {
+                <text>Sizes: </text>@item.Sizes<br />
+            }
+            @if (!String.IsNullOrEmpty(item.Price))
+            {
+                <text>Price: </text>@item.Price
+            }
+            
+            @if (!String.IsNullOrEmpty(item.PaypalCode))
+            {
+                @Html.Raw(item.PaypalCode)
+            }
+            
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    
+}

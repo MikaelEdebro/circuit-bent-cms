@@ -1,0 +1,17 @@
+﻿@model IEnumerable<CircuitBentCMS.Models.Blog>
+
+@{
+    ViewBag.Title = Resources.Widgets.BlogPosts.Archive;
+}
+
+<h1>@Resources.Widgets.BlogPosts.Archive</h1>
+
+<div class="blog-recent">
+    @foreach (var item in Model)
+    {
+        <span class="previous-date">@item.Date.ToString("d", new System.Globalization.CultureInfo("sv"))</span>
+        <a href="/blog/@CircuitBentCMS.Models.CustomHelpers.CreateSlug(item.Headline)">
+            @item.Headline
+        </a><br />
+    }
+</div>

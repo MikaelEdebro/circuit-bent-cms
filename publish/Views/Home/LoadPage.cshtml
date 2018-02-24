@@ -1,0 +1,12 @@
+﻿@model BandPage.Models.Page
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+@if (!Model.HideTitle)
+{
+    <h1>@Model.Title</h1>
+}
+
+@Html.Raw(Model.Content)

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<BandPage.Models.Show>
+
+@{
+    ViewBag.Title = ViewBag.ShowsOnMenu;
+}
+
+<h1>@ViewBag.ShowsOnMenu</h1>
+
+@if (Model.ToList().Count == 0)
+{
+    <em>No shows booked at the moment.</em>
+}
+
+@foreach (var item in Model.Where(a => a.Date > DateTime.Now).OrderBy(a => a.Date))
+{
+    <div class="tour-gig">
+        <div class="tour-date">
+            <span class="separate">@item.Date.Day</span>
+            <span>@item.Date.ToString("MMM", System.Globalization.CultureInfo.InvariantCulture)</span> 
+        </div>
+        
+        <div class="tour-info">
+            @if (!item.Cancelled)
+            {
+                if (!String.IsNullOrEmpty(item.LinkToEvent))
+                {
+                    <a href="@item.LinkToEvent" target="_blank"><b>@item.Title</b></a>
+                }
+                else
+                {
+                    <b>@item.Title</b>
+                }
+
+                if (!String.IsNullOrEmpty(item.Venue))
+                {
+                    <br /><span>Venue: </span>@item.Venue
+                }
+            
+                if (!String.IsNullOrEmpty(item.Time))
+                {
+                    <br /><span>Time: </span>@item.Time
+                }
+            
+                if (!String.IsNullOrEmpty(item.Price))
+                {
+                    <br /><span>Price: </span>@item.Price
+                }
+            }
+            else
+            {
+                <span class="show-cancelled">@item.Title, @item.Venue</span><br /><span> Cancelled</span>
+            }
+        </div>
+        <div class="clear"></div>
+    </div>
+}
+
+<p style="margin-top: 20px;">
+    <em>For bookings, please use the <a href="/contact">contact page</a>.</em>
+</p>
+
+<h2 style="margin-top: 30px;">Previous shows</h2>
+
+@foreach (var item in Model.Where(a => a.Date < DateTime.Now).OrderBy(a => a.Date))
+{
+    if (!String.IsNullOrEmpty(item.LinkToEvent))
+    {
+        <p>@item.Date.Day/@item.Date.Month - <a href="@item.LinkToEvent" target="_blank">@item.Title</a>, @item.Venue</p>
+    }
+    else
+    {
+        <p>@item.Date.Day/@item.Date.Month - @item.Title, @item.Venue</p>
+    }
+}

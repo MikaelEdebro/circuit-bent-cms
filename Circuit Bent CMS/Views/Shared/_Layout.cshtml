@@ -1,0 +1,360 @@
+﻿@{
+    var context = new CircuitBentCMS.Models.CircuitBentCMSContext();
+    var siteSettings = context.SiteSettings.FirstOrDefault();
+
+    CircuitBentCMS.Models.NavigationViewModel NVM = new CircuitBentCMS.Models.NavigationViewModel();
+    NVM.Pages = context.Pages.Where(a => a.ShowOnMenu).OrderBy(a => a.Order).ToList();
+    NVM.MobileImage = siteSettings.MobileImage;
+
+    var imageSliderSettings = context.ImageSliderSettings.FirstOrDefault();
+
+    // get the fonts to load first time
+    var loadFonts = context.Fonts.Where(x => x.Name == siteSettings.TextFont || x.Name == siteSettings.HeadingFont);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+        @{
+            // store the page title
+            string pageTitle = (ViewBag.Title != null && !String.IsNullOrEmpty(ViewBag.Title)) ? String.Format("{0} | {1}", ViewBag.Title, siteSettings.Title) : siteSettings.Title;
+        }
+    <title>@pageTitle</title>
+    
+    @if (String.IsNullOrEmpty(siteSettings.Favicon))
+    {
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    }
+    else
+    {
+        <link href="~/Images/PageSettings/@siteSettings.Favicon" rel="shortcut icon" type="image/x-icon" />
+    }
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SOCIAL MEDIA META TAGS -->
+    <meta name="twitter:card" content="summary">
+
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@Request.Url.AbsoluteUri" />
+
+    @if (IsSectionDefined("MetaDescription"))
+    {
+        @RenderSection("MetaDescription", false)
+    }
+    else
+    {
+        <meta name="description" content="@Html.Raw(siteSettings.MetaDescription)" />
+    }
+
+    
+        
+    @if (IsSectionDefined("MetaSocialMediaTitle"))
+    {
+        @RenderSection("MetaSocialMediaTitle", false)
+    }
+    else
+    {
+        <meta property="og:title" content="@pageTitle" />
+        <meta itemprop="name" content="@pageTitle">
+        <meta name="twitter:title" content="@pageTitle">
+    }
+
+    @if (IsSectionDefined("MetaSocialMediaDescription"))
+    {
+        @RenderSection("MetaSocialMediaDescription", false)
+    }
+    else
+    {
+        <meta property="og:description" content="@siteSettings.MetaDescription" />
+        <meta itemprop="description" content="@siteSettings.MetaDescription">
+        <meta name="twitter:description" content="@siteSettings.MetaDescription">
+    }
+
+    @if (IsSectionDefined("MetaSocialMediaImage"))
+    {
+        @RenderSection("MetaSocialMediaImage", false)
+    }
+    
+    
+
+    <!-- LOAD STYLESHEETS -->
+    @Styles.Render("~/bundles/css/public/components")
+    @Styles.Render("~/bundles/css/public")
+        
+
+    <!-- BEGIN CUSTOM STYLES -->
+    <style type="text/css">
+        @if (loadFonts != null)
+        {
+            foreach (var item in loadFonts)
+            {
+                if (!String.IsNullOrEmpty(item.CssCode))
+                {
+                    @Html.Raw(item.CssCode.Replace("url('", "url('/Fonts/"))
+                }
+            }
+        }
+
+        @{
+            // get the fonts that should be loaded into the css
+            var font1 = context.Fonts.FirstOrDefault(a => a.Name == siteSettings.TextFont);
+            var font2 = context.Fonts.FirstOrDefault(a => a.Name == siteSettings.HeadingFont);
+
+            // define empty fonts to use the defaults stated after in the css, unless the fonts exist
+            string textFont = "";
+            string headingFont = "";
+
+            // prevent error being thrown if the font have been removed, but still is defined as the active font
+            if (font1 != null)
+            {
+                textFont = font1.FontFamily;
+            }
+            if (font2 != null)
+            {
+                headingFont = font2.FontFamily;
+            }
+
+            // get the opacity of the container
+            double containerOpacity = (Convert.ToDouble(siteSettings.ContainerOpacity) / 100);
+            string strContainerOpacity = containerOpacity.ToString("N2").Replace(',', '.');
+            string strCurrentOpacity = (containerOpacity - .03).ToString("N2").Replace(',', '.');
+
+        }
+
+        body 
+        {
+            background-color: rgb(@siteSettings.BackgroundColor);
+            color: rgb(@siteSettings.TextColor);
+            font-size: @(siteSettings.TextSize)px;
+            font-family: @Html.Raw(textFont);
+
+            @if (!String.IsNullOrEmpty(siteSettings.BackgroundImage))
+            {
+                <text>
+                    background-image: url(@Url.Content("~/Images/PageSettings/" + siteSettings.BackgroundImage));
+                </text>
+            
+                if (siteSettings.BackgroundImageFullScreen)
+                {
+                    <text>
+                        -webkit-background-size: cover; 
+                        -moz-background-size: cover; 
+                        -o-background-size: cover; 
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-attachment: fixed;
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        background-repeat: repeat;
+                    </text>
+                }
+            }
+        
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: rgb(@siteSettings.HeadingColor) !important;
+            font-family: @Html.Raw(headingFont), "Helvetica Neue", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+        }
+        h1 { font-size: @(Convert.ToInt32(siteSettings.HeadingSize) + 32)px; }
+        h2 { font-size: @(Convert.ToInt32(siteSettings.HeadingSize) + 20)px; }
+        h3 { font-size: @(Convert.ToInt32(siteSettings.HeadingSize) + 14)px; }
+        h4 { font-size: @(Convert.ToInt32(siteSettings.HeadingSize) + 8)px; }
+        h5 { font-size: @(Convert.ToInt32(siteSettings.HeadingSize) + 4)px; }
+        h6 { font-size: @(Convert.ToInt32(siteSettings.HeadingSize))px; }
+
+        input, select, textarea {
+            font-family: @Html.Raw(textFont), "Helvetica Neue", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+        }
+    
+        a       { color: rgb(@siteSettings.LinkColor); }
+        a:hover { color: rgb(@CircuitBentCMS.Models.CustomHelpers.BrightenColor(siteSettings.LinkColor)); }
+    
+        .nav > li > a {
+            font-family: @Html.Raw(headingFont), "Helvetica Neue", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+        }
+        .body-inner {
+            background: rgba(@siteSettings.ContainerColor, @strContainerOpacity);
+        }
+        .header-inner, .body-inner, .footer-inner {
+            max-width: @(siteSettings.ContainerWidth)px;
+        }
+
+        @if (!String.IsNullOrEmpty(siteSettings.CustomCSS))
+        {
+            @Html.Raw(siteSettings.CustomCSS)
+        }
+    </style>
+    <!-- END CUSTOM STYLES -->
+
+</head>
+<body>
+
+    <div class="wrap"> <!-- BEGIN WRAP -->
+
+        <header> <!-- BEGIN HEADER -->
+            <div class="header-inner clearfix"> <!-- BEGIN HEADER INNER -->
+                <div class="header-image">
+                    @if (!String.IsNullOrEmpty(siteSettings.HeaderImage))
+                    {
+                        <a href="/">
+                            <img src="~/Images/PageSettings/@siteSettings.HeaderImage" alt="@siteSettings.Title" />
+                        </a>
+                    }
+                </div>
+
+                <nav class="navbar navbar-default" role="navigation"> <!-- BEGIN NAV -->
+                    @Html.Partial("Navigation", NVM)
+                </nav> <!-- END NAV -->
+
+            </div> <!-- END HEADER INNER -->
+        </header> <!-- END HEADER -->
+
+    
+        @if (ViewBag.ImageSliderImages != null)
+        {
+            <div class="image-slider clearfix"> <!-- BEGIN IMAGE SLIDER -->
+            @if (ViewBag.ImageSliderImages.Count == 1)
+            {
+                foreach (var image in ViewBag.ImageSliderImages)
+                {
+                    if (!String.IsNullOrEmpty(image.LinkUrl))
+                    {
+                        // only show the <a> tag if there really is a link, otherwise it doesn't work in IE10
+                        @Html.Raw(String.Format("<a href='{0}' title='{1}'><img src='/Images/ImageSlider/{2}' alt='{2}' /></a>", image.LinkUrl, image.Title, image.ImageUrl));
+                    }
+                    else
+                    {
+                        @Html.Raw(String.Format("<img src='/Images/ImageSlider/{0}' alt='{0}' />", image.ImageUrl));
+                    }
+                }
+            }
+            else if (ViewBag.ImageSliderImages.Count > 1)
+            {
+                
+                <ul class="bxslider">
+                @foreach (var image in ViewBag.ImageSliderImages)
+                {
+                    <li>@if (!String.IsNullOrEmpty(image.LinkUrl))
+                        {
+                            // only show the <a> tag if there really is a link, otherwise it doesn't work in IE10
+                            @Html.Raw(String.Format("<a href=\"{0}\" title=\"{1}\"><img src=\"/Images/ImageSlider/{2}\" alt=\"{2}\" /></a>", image.LinkUrl, image.Title, image.ImageUrl));
+                        }
+                        else
+                        {
+                            @Html.Raw(String.Format("<img src=\"/Images/ImageSlider/{0}\" alt=\"{0}\" />", image.ImageUrl));
+                        }</li>
+                }
+                </ul>
+                
+            }
+            </div> <!-- END IMAGE SLIDER -->
+        }
+    
+
+        <div class="body"> <!-- BEGIN MAIN CONTENT -->
+            <div class="body-inner clearfix">
+                @RenderBody()
+            </div>
+        </div> <!-- END MAIN CONTENT -->
+
+        @if (!String.IsNullOrEmpty(siteSettings.FooterText))
+        {
+            <footer> <!-- BEGIN FOOTER -->
+                <div class="footer-inner">
+                    @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(siteSettings.FooterText))
+                </div>
+                
+                @if (!String.IsNullOrEmpty(siteSettings.FooterImage))
+                {
+                    <div class="footer-image"> <!-- BEGIN FOOTER IMAGE -->
+                        <img src="/Images/PageSettings/@siteSettings.FooterImage" />
+                    </div> <!-- END FOOTER IMAGE -->
+                }
+            </footer> <!-- END FOOTER -->
+        }
+
+        
+
+    </div> <!-- END WRAP -->
+
+     <!-- BEGIN CUSTOM HTML -->
+    @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(siteSettings.CustomHtml))
+     <!-- END CUSTOM HTML -->
+
+
+    <div class="loader-icon"> <!-- BEGIN LOADER ICON -->
+        <img src="~/Images/ajax-loader.gif" alt="Loader" />
+        <h4>@Resources.Views.Layout.LoaderIconText</h4>
+    </div> <!-- END LOADER ICON -->
+
+
+    <!-- LOAD SCRIPTS -->
+    @Scripts.Render("~/bundles/scripts/jquery")
+    <script>
+        if (typeof jQuery == 'undefined') {
+            document.write(unescape("%3Cscript src='/Scripts/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/scripts/public/components")
+    @Scripts.Render("~/bundles/scripts/public")
+
+    
+
+    @if (ViewBag.ImageSliderImages != null)
+    {
+        <script>
+            $(document).ready(function() {
+                $('.bxslider').bxSlider({
+                    auto: true,
+                    pause: @(imageSliderSettings.TransitionSpeed * 1000),
+                    speed: 1000,
+                    mode: '@(imageSliderSettings.TransitionMode)',
+                    controls: false,
+                    autoHover: true
+                });
+            });
+        </script>
+    }
+
+    @if (!String.IsNullOrEmpty(Convert.ToString(TempData["StatusMessage"])) || !String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+    {    
+        <script>
+            $(function () {
+                var message = '@Html.Raw(TempData["StatusMessage"])';
+                var type = 'notice';
+                var duration = 2000;
+                
+            @if (TempData["MessageDuration"] != null)
+            {
+                <text>duration = @(TempData["MessageDuration"]);</text>
+            }
+                
+            @if (!String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+            {
+                <text>message = '@(Html.Raw(TempData["ErrorMessage"]))';</text>
+                <text>type = 'error';</text>
+                <text>duration = 5000;</text> 
+            }
+                ShowStatusMessage(message, type, duration);
+            });
+        </script>
+    }
+
+    <!-- BEGIN GOOGLE ANALYTICS -->
+    @if (!String.IsNullOrEmpty(siteSettings.GoogleAnalytics))
+    {
+        @Html.Raw(siteSettings.GoogleAnalytics)
+    }
+    <!-- END GOOGLE ANALYTICS -->
+
+    <!-- BEGIN SITE SPECIFIC SCRIPTS -->
+    @RenderSection("Scripts", false)
+    <!-- END SITE SPECIFIC SCRIPTS -->
+</body>
+</html>

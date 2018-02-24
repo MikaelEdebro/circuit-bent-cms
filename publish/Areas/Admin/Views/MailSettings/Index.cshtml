@@ -1,0 +1,31 @@
+@model BandPage.Models.MailSettings
+
+@{
+    ViewBag.Title = "Mail settings";
+    
+    // check if update or post new
+    string newOrUpdate = "Edit";
+
+    if (Model == null)
+    {
+        newOrUpdate = "Create";
+    }
+}
+
+<h1>Mail settings</h1>
+<p>
+    Here you configure e-mail settings for the contact form. Hover over the info icon on each item for more details.
+</p>
+
+@using (Html.BeginForm(newOrUpdate, "MailSettings", FormMethod.Post)) {
+    @Html.ValidationSummary(true)
+        
+    if (Model != null)
+    {
+        @Html.HiddenFor(model => model.MailSettingsId)
+    }
+        
+    @Html.Partial("_CreateOrEdit", Model)
+    
+    <input type="submit" value="Save changes" />
+}

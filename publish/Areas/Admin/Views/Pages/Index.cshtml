@@ -1,0 +1,46 @@
+@model IEnumerable<BandPage.Models.Page>
+
+@{
+    ViewBag.Title = "Pages";
+}
+
+<h1>Pages</h1>
+
+<p>
+    @Html.ActionLink("Create new page", "Create")
+</p>
+<table>
+    <tr>
+        <th></th>
+        <th>
+            Title
+        </th>
+        <th class="table-hide">
+            URL
+        </th>
+        <th class="table-hide">
+            Last updated
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PageId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PageId })
+        </td>
+        <td>
+			@item.Title
+        </td>
+        <td class="table-hide">
+			<a href="http://@Request.Url.Host/@item.Slug" target="_blank">http://@Request.Url.Host/@item.Slug</a>
+        </td>
+        <td class="table-hide">
+			@String.Format("{0:g}", item.LastUpdated)
+        </td>
+    </tr>
+}
+
+</table>
+
+

@@ -1,0 +1,30 @@
+@model CircuitBentCMS.Models.SocialMedia
+
+@{
+    ViewBag.Title = "Social media";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li class="active">Social media</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "SocialMedia", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    
+    if (Model != null)
+    {
+        @Html.HiddenFor(model => model.SocialMediaId)
+    }
+	@Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+}

@@ -1,0 +1,106 @@
+﻿@model BandPage.Models.HomeViewModel
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="column-left">
+    <div class="blog-recent">
+        @foreach (var item in Model.Blogs)
+        {
+            <div class="blog-post">
+                <h1 style="margin-bottom: 0px">@item.Headline <span style="color: #6f6f6f; font-size: .65em;">(@item.Date.Day/@item.Date.Month)</span></h1>
+            
+                @Html.Raw(item.Text)
+            </div>
+        
+        }
+    
+        @Html.ActionLink("Older posts", "Index", "Blog")
+
+    </div>
+
+</div>
+
+
+<div class="column-right">
+    <div class="shows">
+        <h3>Upcoming shows</h3>
+        @if (Model.Shows.Count == 0)
+        {
+            <em>No shows booked at the moment.</em>
+        }
+        else
+        {
+            // number of shows to display
+            int showCount = 10;
+            foreach (var item in Model.Shows.Take(showCount))
+            {
+                <div class="tour-gig-start">
+                    <div class="tour-date" style="width: 30px; margin: 3px 5px 0 0;">
+                        <span class="separate smaller">@item.Date.Day</span>
+                        <span class="smaller">@item.Date.ToString("MMM", System.Globalization.CultureInfo.InvariantCulture)</span> 
+                    </div>
+                    @if (!item.Cancelled)
+                    {
+                        if (!String.IsNullOrEmpty(item.LinkToEvent))
+                        {
+                            <span class="gig-info"><a href="@item.LinkToEvent" target="_blank">@item.Title</a>, @item.Venue</span>
+                        }
+                        else
+                        {
+                            <span class="gig-info">@item.Title, @item.Venue</span>
+                        }
+                    }
+                    else
+                    {
+                         <span class="gig-info show-cancelled">@item.Title, @item.Venue</span><span> (cancelled)</span>
+                    }
+
+                    <div class="clear"></div>
+                </div>
+            }
+            if (Model.Shows.ToList().Count > showCount)
+            {
+                <a href="/tour">Show all dates</a>
+            }
+        }
+    </div>
+
+    
+    <div class="social-media">
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Facebook))
+        {
+            <a href="@Model.SocialMedia.Facebook" target="_blank"><img src="~/Images/icons/facebook.png" alt="Facebook" title="Facebook" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Youtube))
+        {
+            <a href="@Model.SocialMedia.Youtube" target="_blank"><img src="~/Images/icons/youtube.png" alt="YouTube" title="YouTube" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Twitter))
+        {
+            <a href="@Model.SocialMedia.Twitter" target="_blank"><img src="~/Images/icons/twitter.png" alt="Twitter" title="Twitter" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Soundcloud))
+        {
+            <a href="@Model.SocialMedia.Soundcloud" target="_blank"><img src="~/Images/icons/soundcloud.png" alt="SoundCloud" title="SoundCloud" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.GooglePlus))
+        {
+            <a href="@Model.SocialMedia.GooglePlus" target="_blank"><img src="~/Images/icons/google_plus.png" alt="Google Plus" title="Google Plus" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Myspace))
+        {
+            <a href="@Model.SocialMedia.Myspace" target="_blank"><img src="~/Images/icons/myspace.png" alt="MySpace" title="MySpace" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Instagram))
+        {
+            <a href="@Model.SocialMedia.Instagram" target="_blank"><img src="~/Images/icons/instagram.png" alt="Instagram" title="Instagram" /></a>
+        }
+        @if (!String.IsNullOrEmpty(Model.SocialMedia.Spotify))
+        {
+            <a href="@Model.SocialMedia.Spotify" target="_blank"><img src="~/Images/icons/spotify.png" alt="Spotify" title="Spotify" /></a>
+        }
+    </div>
+</div>
+
+<div class="clear"></div>

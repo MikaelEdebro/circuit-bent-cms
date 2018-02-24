@@ -1,0 +1,207 @@
+@model CircuitBentCMS.Models.ImageSliderViewModel
+@{
+    ViewBag.Title = "Image slider";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+          <li class="active">Image slider</li>
+        </ol>
+    </div>
+    <div class="col-sm-6 buttons">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#uploadModal">
+                <i class="fa fa-plus"></i> Upload images
+            </button>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#sliderSettingsModal">
+                <i class="fa fa-cog"></i> Image slider settings
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Upload images</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("ImageUpload", "ImageSlider", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+                {
+                    <div class="form-group">
+                        <label for="ImageSliderId" class="control-label col-sm-4">Select existing slider</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("ImageSliderId", Model.ImageSliders.Select(imgId => new SelectListItem { Text = imgId.Title, Value = imgId.ImageSliderId.ToString() }), new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="AddSliderTitle" class="control-label col-sm-4">Or create a new</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="AddSliderTitle" id="AddSliderTitle" placeholder="Image slider name" class="form-control" />
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="files" class="control-label col-sm-4">Select images</label>
+                        <div class="col-sm-8">
+                            <input type="file" name="files" id="files" multiple class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="sliderSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Image slider settings</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Settings", "ImageSlider", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    <div class="form-group">
+                        <label for="ImageSliderSettings_ImageSliderOnHomepage" class="control-label col-sm-4">Image slider on home page</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                @Html.DropDownListFor(a => a.ImageSliderSettings.ImageSliderOnHomepage, Model.ImageSliders.Select(imgId => new SelectListItem { Text = imgId.Title, Value = imgId.ImageSliderId.ToString() }), "Don't display", new { @class = "form-control" })
+
+                                <div class="input-group-addon">
+                                    <img src="~/Images/icons/actions/info.png" alt="Info" title="Select the image slider appear on the home page" class="info-icon" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ImageSliderSettings_TransitionMode" class="control-label col-sm-4">Transition mode</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                @Html.DropDownListFor(a => a.ImageSliderSettings.TransitionMode, Model.TransitionModes, new { @class = "form-control" })
+
+                                <div class="input-group-addon">
+                                    <img src="~/Images/icons/actions/info.png" alt="Info" title="The way that the slider changes between images." class="info-icon" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="ImageSliderSettings_TransitionSpeed" class="control-label col-sm-4">Transition speed</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                @Html.TextBoxFor(a => a.ImageSliderSettings.TransitionSpeed, new { @class = "form-control" })
+
+                                <div class="input-group-addon">
+                                    <img src="~/Images/icons/actions/info.png" alt="Info" title="Time in seconds between slides." class="info-icon" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            @Html.HiddenFor(a => a.ImageSliderSettings.ImageSliderSettingsId)
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="reset" class="btn btn-default">Undo</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (var item in Model.ImageSliders)
+{
+    <div class="col-md-6">
+        <div class="image-slider" data-id="@item.ImageSliderId">
+            <a href="javascript:ConfirmDelete(@item.ImageSliderId)" class="btn btn-default delete-slider"><i class="fa fa-trash-o"></i> Delete slider</a>
+            <h4>@item.Title</h4>
+    
+            @if (item.ImageSliderImages.Count > 0)
+            {
+                <ul class="sortable clearfix">
+                    @foreach (var image in item.ImageSliderImages.OrderBy(a => a.Order))
+                    {
+                        <li class="slide clearfix" data-id="@image.ImageSliderImageId" data-imageslider-id="@item.ImageSliderId">
+                            <div class="image">
+                                <span class="helper"></span>
+                                <img src="~/Images/ImageSlider/thumb_@image.ImageUrl" alt="" title="@image.ImageUrl" />
+                            </div>
+                            <div class="info">
+                                <h4>@image.Title</h4>
+                            </div>
+                            <div class="icons">
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="/Admin/ImageSlider/Edit/@image.ImageSliderImageId"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                                        </li>
+                                        <li>
+                                            <a href="/Admin/ImageSlider/Delete/@image.ImageSliderImageId"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script src="~/Scripts/ImageSlider.js"></script>
+<script>
+    $(function () {
+        InitSortable('/Admin/ImageSlider/UpdateOrder');
+    });
+
+    function ConfirmDelete(id) {
+        if ($('li[data-imageslider-id=' + id + ']').length) {
+            if (confirm('All the images for this image slider will also be deleted. Do you wish to continue?')) {
+                DeleteImageSlider(id);
+            }
+        } else {
+            DeleteImageSlider(id);
+        }
+    }
+
+    function DeleteImageSlider(id) {
+        $.ajax({
+            url: '/Admin/ImageSlider/DeleteImageSlider',
+            type: 'POST',
+            data: {
+                id: id
+            }
+        }).done(function (result) {
+            if (result.success) {
+                ShowStatusMessage('Image slider deleted successfully!', 'notice', 3000);
+
+                // remove the image slider from the DOM
+                $('.image-slider[data-id=' + result.id + ']').parent('div').remove();
+            }
+            else {
+                ShowStatusMessage('An error occurred. Could not delete image slider.', 'error', 5000);
+            }
+        });
+    }
+</script>
+}

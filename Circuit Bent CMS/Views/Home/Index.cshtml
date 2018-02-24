@@ -1,0 +1,226 @@
+﻿@model CircuitBentCMS.Models.HomeViewModel
+
+@{
+    ViewBag.Title = Model.Page.Title;
+    
+    // if it's the home page, remove the title so only the title shown is the one supplied in "Page settings"
+    if (Model.Page.HomePage)
+    {
+        ViewBag.Title = "";    
+    }
+
+    bool hasLeftColumn = false;
+    bool hasRightColumn = false;
+    
+    // check if there is a left or right column
+    hasLeftColumn = (Model.SubPages.Count > 0) ? true : false;
+    hasRightColumn = (!String.IsNullOrEmpty(Model.Page.SideBarContent)) ? true : false;
+    
+}
+
+<div class="row">
+    @if (hasLeftColumn)
+    {    
+        <div class="col-sm-2 column-left">
+            <a href="/@CustomHelpers.CreateSlug(Model.MainPageTitle)">
+                <h3>@Model.MainPageTitle</h3>
+            </a>
+
+            <ul>
+            @foreach (var sub in Model.SubPages)
+            {
+                <li>
+                    @if (!String.IsNullOrEmpty(sub.CustomPage))
+                    {
+                        // if it's a custom page we add the fixed route
+                        string url = "#";
+
+                        // check what type of page it is and link correspondingly
+                        switch (sub.CustomPage)
+                        {
+                            case "shop":
+                                url = "/shop";
+                                break;
+                            case "events":
+                                url = "/events";
+                                break;
+                            case "blog":
+                                url = "/blog";
+                                break;
+                            case "gallery":
+                                url = "/gallery";
+                                break;
+                        }
+                        <a href="@url">
+                            @sub.Title
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/@CustomHelpers.CreateSlug(Model.MainPageTitle)/@CustomHelpers.CreateSlug(sub.Title)">
+                            @sub.Title
+                        </a>
+                    }
+                </li>
+            }
+            </ul>
+        </div>
+    }
+
+    @if (hasLeftColumn && hasRightColumn)
+    {
+        <text><div class="col-sm-7 column-main"></text>
+    }
+    else if (hasLeftColumn && !hasRightColumn)
+    {
+        <text><div class="col-sm-10 column-main"></text>
+    }
+    else if (!hasLeftColumn && hasRightColumn)
+    {
+        <text><div class="col-sm-9 column-main"></text>
+    }
+    else
+    {
+        <text><div class="col-sm-12 column-main"></text>
+    }
+
+
+    @if (!String.IsNullOrEmpty(Model.Page.Content))
+    {
+        @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(Model.Page.Content))
+    }
+
+    @if (hasRightColumn)
+    {
+        // if right column, end column-main div
+        @:</div>
+        <div class="col-sm-3 column-right">
+            @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(Model.Page.SideBarContent))
+        </div>
+    }
+    else
+    {
+        // if left column, end column-main div
+        @:</div>   
+    }
+</div>
+
+@if (!String.IsNullOrEmpty(Model.Page.WidgetArea1) || !String.IsNullOrEmpty(Model.Page.WidgetArea2) || !String.IsNullOrEmpty(Model.Page.WidgetArea3))
+{
+    int widgetColumns = 0;
+    string bootstrapColumnDivider = "4";
+    
+    // find out how many widget columns there are
+    if (!String.IsNullOrEmpty(Model.Page.WidgetArea1))
+    {
+        widgetColumns += 1;
+    }
+    if (!String.IsNullOrEmpty(Model.Page.WidgetArea2))
+    {
+        widgetColumns += 1;
+    }
+    if (!String.IsNullOrEmpty(Model.Page.WidgetArea3))
+    {
+        widgetColumns += 1;
+    }
+
+    // check how many columns to output
+    switch (widgetColumns)
+    {
+        case 1:
+            bootstrapColumnDivider = "12";
+            break;
+        case 2:
+            bootstrapColumnDivider = "6";
+            break;
+        case 3:
+            bootstrapColumnDivider = "4";
+            break;
+    }
+    
+    <div class="row widget-third">
+        @if (!String.IsNullOrEmpty(Model.Page.WidgetArea1))
+        {
+            <div class="col-sm-@(bootstrapColumnDivider)">
+                <div class="widget">
+                    @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(Model.Page.WidgetArea1))
+                </div>
+            </div>
+        }
+        @if (!String.IsNullOrEmpty(Model.Page.WidgetArea2))
+        {
+            <div class="col-sm-@(bootstrapColumnDivider)">
+                <div class="widget">
+                    @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(Model.Page.WidgetArea2))
+                </div>
+            </div>
+        }
+        @if (!String.IsNullOrEmpty(Model.Page.WidgetArea3))
+        {
+            <div class="col-sm-@(bootstrapColumnDivider)">
+                <div class="widget">
+                    @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(Model.Page.WidgetArea3))
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (!String.IsNullOrEmpty(Model.Page.WidgetArea4))
+{
+    <div class="row widget-bottom">
+        <div class="col-sm-12">
+            <div class="widget">
+                @Html.Raw(CircuitBentCMS.Helpers.Widgets.InsertWidgets(Model.Page.WidgetArea4))
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @if (!String.IsNullOrEmpty(Model.Page.Scripts))
+    {
+        @Html.Raw(Model.Page.Scripts)
+    }
+}
+
+
+    
+@if (!String.IsNullOrEmpty(Model.Page.SocialMediaTitle))
+{
+    <text>
+        @section MetaSocialMediaTitle {
+            <meta property="og:title" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaTitle, 95, false), false)" />
+            <meta itemprop="name" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaTitle, 140, false), false)">
+            <meta name="twitter:title" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaTitle, 70, false), false)">
+        }
+    </text>
+}
+@if (!String.IsNullOrEmpty(Model.Page.SocialMediaDescription))
+{
+    <text>
+        @section MetaDescription {
+            <meta name="description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaDescription, 297, false), false)" />
+        }
+    </text>
+    
+    <text>
+        @section MetaSocialMediaDescription {
+            <meta property="og:description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaDescription, 297, false), false)" />
+            <meta itemprop="description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaDescription, 185, false), false)">
+            <meta name="twitter:description" content="@CustomHelpers.StripHtml(CustomHelpers.Truncate(Model.Page.SocialMediaDescription, 200, false), false)">
+        }
+    </text>
+    
+}
+@if (!String.IsNullOrEmpty(Model.Page.SocialMediaImage))
+{
+    <text>
+        @section MetaSocialMediaImage {
+            <meta property="og:image" content="@(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host)/Images/PageImages/@Model.Page.SocialMediaImage" />
+            <meta itemprop="image" content="@(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host)/Images/PageImages/@Html.Raw(Model.Page.SocialMediaImage)">
+            <meta name="twitter:image:src" content="@(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host)/Images/PageImages/@Html.Raw(Model.Page.SocialMediaImage)">
+        }
+    </text>
+    
+}

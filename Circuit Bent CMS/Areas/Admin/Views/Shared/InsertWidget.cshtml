@@ -1,0 +1,120 @@
+﻿@model IList<CircuitBentCMS.Models.ImageSlider>
+<div class="insert-widget">
+    <img src="/Images/icons/actions/web_(add)_16x16.gif" alt="" />
+    <a href="">Insert widget</a>
+</div>
+
+<div class="widget-list">
+    <a href="" class="widget-list-close">
+        Close <img src="~/Images/icons/actions/delete_16x16.gif" />
+    </a>
+    
+    <h1>Insert widget</h1>
+    <p>
+        Widgets allow you to insert features wherever you want on your pages. 
+        Just click the button next to the widget you want to insert.
+    </p>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Widget code</th>
+            <th class="table-hide">Description</th>
+        </tr>
+        <tr>
+            <td><input type="button" value="Insert" data-widget-code="[widget=blogposts]" /></td>
+            <td>[widget=blogposts]</td>
+            <td class="table-hide">Shows the full content of the last three blog posts.</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Insert" data-widget-code="[widget=recentblogs]" /></td>
+            <td>[widget=recentblogs]</td>
+            <td class="table-hide">Shows a list of the 10 most recent blog posts.</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Insert" data-widget-code="[widget=socialmedia]" /></td>
+            <td>[widget=socialmedia]</td>
+            <td class="table-hide">Displays clickable social media icons.</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Insert" data-widget-code="[widget=contactform]" /></td>
+            <td>[widget=contactform]</td>
+            <td class="table-hide">Adds a contact form to the page.</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Insert" data-widget-code="[widget=events]" /></td>
+            <td>[widget=events]</td>
+            <td class="table-hide">Shows a list of upcoming events.</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Insert" data-widget-code="[widget=upcomingevents]" /></td>
+            <td>[widget=upcomingevents]</td>
+            <td class="table-hide">Shows a smaller list of the 10 upcoming events.</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Insert" data-widget-code="[widget=facebookfeed]" /></td>
+            <td>[widget=facebookfeed]</td>
+            <td class="table-hide">Displays your Facebook feed.</td>
+        </tr>
+        <tr>
+            <td>
+                @{
+                    string imageSliderVal = "[widget=imageslider(0)]";
+                    if (Model != null && Model.Count > 0) {
+                        imageSliderVal = String.Format("[widget=imageslider({0})]", Model.FirstOrDefault().ImageSliderId.ToString());
+                    }
+                }
+                <input type="button" value="Insert" data-widget-code="@imageSliderVal" id="ImageSliderButton" />
+            </td>
+            <td>
+                @if (Model != null && Model.Count > 0)
+                {
+                    @Html.DropDownList("ImageSliderId", Model.Select(a => new SelectListItem { Text = a.Title, Value = a.ImageSliderId.ToString()}))
+                }
+                else
+                {
+                    <select name="ImageSliderId">
+                        <option value="0">No sliders available</option>
+                    </select>
+                }
+                @*@Html.DropDownList("ImageSliderId", Model.Select(a => new SelectListItem { Text = a.Title, Value = a.ImageSliderId.ToString()}))*@
+            </td>
+            <td class="table-hide">Inserts selected image slider.</td>
+        </tr>
+    </table>
+</div>
+
+
+<script>
+    $(function () {
+        $('.insert-widget a').click(function () {
+            $('.widget-list').show();
+
+            return false;
+        });
+
+        $('.widget-list-close').click(function () {
+            $('.widget-list').hide();
+
+            return false;
+        });
+
+        $('#ImageSliderId').change(function () {
+            $('#ImageSliderButton').attr('data-widget-code', '[widget=imageslider(' + $(this).val() + ')]');
+        });
+
+        // enable the buttons to insert widget code
+        $('input[type=button]').each(function () {
+            $(this).click(function () {
+                tinyMCE.activeEditor.execCommand('mceInsertContent', false, $(this).attr('data-widget-code'));
+                $('.widget-list').hide();
+            });
+        });
+    });
+</script>

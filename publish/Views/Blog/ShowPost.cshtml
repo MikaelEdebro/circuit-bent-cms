@@ -1,0 +1,16 @@
+﻿@model BandPage.Models.Blog
+@{
+    ViewBag.Title = Model.Headline;
+}
+
+<div class="blog-recent">
+            <div class="blog-post">
+                <h1 style="margin-bottom: 0px">@Model.Headline <span style="color: #6f6f6f; font-size: .65em;">(@Model.Date.Day/@Model.Date.Month)</span></h1>
+            
+                @Html.Raw(Model.Text)
+            </div>
+
+    
+        @Html.ActionLink("Back to index", "Index", "Blog")
+
+    </div>

@@ -1,0 +1,504 @@
+﻿@model CircuitBentCMS.Models.SiteSettings
+@{
+    ViewBag.Title = "Site design";
+}
+
+@Scripts.Render("~/bundles/scripts/jquery")
+
+<link rel="stylesheet" media="screen" type="text/css" href="~/Scripts/colorpicker/css/colorpicker.css" />
+<script type="text/javascript" src="~/Scripts/colorpicker/js/colorpicker.js"></script>
+
+<div class="row menu">
+    <div class="col-xs-6">
+        <ol class="breadcrumb">
+            <li class="active">Site design</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "SiteDesign", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal clearfix", style = "max-width: 100%" }))
+{
+<ul class="nav nav-tabs" style="margin-bottom: 20px">
+    <li class="active"><a href="#images" data-toggle="tab">Images</a></li>
+    <li><a href="#colors" data-toggle="tab">Colors</a></li>
+    <li><a href="#text" data-toggle="tab">Text & headings</a></li>
+    <li><a href="#preview" data-toggle="tab">Preview</a></li>
+    <li class="submit-button">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </li>
+</ul>
+
+
+<div class="tab-content">
+    <div class="tab-pane active" id="images">
+        <div class="form-group">
+            <label for="BackgroundImage" class="control-label col-sm-2">Background image</label>
+            <div class="col-sm-4" style="margin-bottom: 15px;">
+                <div class="input-group">
+                    <input type="file" name="BackgroundImage" id="BackgroundImage" class="form-control" />
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Upload an image to be used as a background." class="info-icon" />
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="BackgroundImageFullScreen" id="BackgroundImageFullScreen" @if (Model.BackgroundImageFullScreen) { <text>checked="checked"</text> } />
+                        Full screen background
+                    </label>
+                </div>
+                    
+                @Html.ValidationMessageFor(model => model.BackgroundImage)
+            </div>
+            <div class="col-sm-6">
+                @if (!String.IsNullOrEmpty(Model.BackgroundImage))
+                {
+                    <div class="thumbnail design-image">
+                        <img src="~/Images/PageSettings/@Model.BackgroundImage" class="responsive" />
+                        <div class="caption">
+                            <a href="/Admin/SiteDesign/DeleteImage/?type=background" class="btn btn-default">
+                                <i class="fa fa-trash-o"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <label for="HeaderImage" class="control-label col-sm-2">Header image</label>
+            <div class="col-sm-4" style="margin-bottom: 15px;">
+                <div class="input-group">
+                    <input type="file" name="HeaderImage" id="HeaderImage" class="form-control" />
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="The image on the header." class="info-icon" />
+                        
+                    </div>
+                </div>
+                    
+                @Html.ValidationMessageFor(model => model.HeaderImage)
+            </div>
+            <div class="col-sm-6">
+                @if (!String.IsNullOrEmpty(Model.HeaderImage))
+                {
+                    <div class="thumbnail design-image">
+                        <img src="~/Images/PageSettings/@Model.HeaderImage" class="responsive" />
+                        <div class="caption">
+                            <a href="/Admin/SiteDesign/DeleteImage/?type=header" class="btn btn-default">
+                                <i class="fa fa-trash-o"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <label for="FooterImage" class="control-label col-sm-2">Footer image</label>
+            <div class="col-sm-4" style="margin-bottom: 15px;">
+                <div class="input-group">
+                    <input type="file" name="FooterImage" id="FooterImage" class="form-control" />
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Upload an image to be used below the footer." class="info-icon" />
+                    </div>
+                </div>
+
+                @Html.ValidationMessageFor(model => model.FooterImage)
+            </div>
+            <div class="col-sm-6">
+                @if (!String.IsNullOrEmpty(Model.FooterImage))
+                {
+                    <div class="thumbnail design-image">
+                        <img src="~/Images/PageSettings/@Model.FooterImage" class="responsive" />
+                        <div class="caption">
+                            <a href="/Admin/SiteDesign/DeleteImage/?type=footer" class="btn btn-default">
+                                <i class="fa fa-trash-o"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <label for="MobileImage" class="control-label col-sm-2">Mobile image</label>
+            <div class="col-sm-4" style="margin-bottom: 15px;">
+                <div class="input-group">
+                    <input type="file" name="MobileImage" id="MobileImage" class="form-control" />
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Image used when switching to mobile view." class="info-icon" />
+                    </div>
+                </div>
+                    
+                @Html.ValidationMessageFor(model => model.MobileImage)
+            </div>
+            <div class="col-sm-6">
+                @if (!String.IsNullOrEmpty(Model.MobileImage))
+                {
+                    <div class="thumbnail design-image">
+                        <img src="~/Images/PageSettings/@Model.MobileImage" class="responsive" />
+                        <div class="caption">
+                            <a href="/Admin/SiteDesign/DeleteImage/?type=mobile" class="btn btn-default">
+                                <i class="fa fa-trash-o"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <label for="Favicon" class="control-label col-sm-2">Favicon</label>
+            <div class="col-sm-4" style="margin-bottom: 15px;">
+                <div class="input-group">
+                    <input type="file" name="Favicon" id="Favicon" class="form-control" />
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="The favicon is shown in the browser tab next to your sites title, and when you bookmark a page." class="info-icon" />
+                    </div>
+                </div>
+                    
+                @Html.ValidationMessageFor(model => model.Favicon)
+            </div>
+            <div class="col-sm-6">
+                @if (!String.IsNullOrEmpty(Model.Favicon))
+                {
+                    <div class="thumbnail design-image">
+                        <img src="~/Images/PageSettings/@Model.Favicon" class="responsive" />
+                        <div class="caption">
+                            <a href="/Admin/SiteDesign/DeleteImage/?type=favicon" class="btn btn-default">
+                                <i class="fa fa-trash-o"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="colors">
+        
+        <div class="form-group">
+            <label class="control-label col-sm-2">Background color</label>
+            <div class="col-sm-10">
+                @Html.Raw(CircuitBentCMS.Models.CustomHelpers.ColorPicker("background-colorpicker", Model.BackgroundColor, "background-color"))
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Container color</label>
+            <div class="col-sm-10">
+                @Html.Raw(CircuitBentCMS.Models.CustomHelpers.ColorPicker("container-colorpicker", Model.ContainerColor, "container-color"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="container-width" class="control-label col-sm-2">Container width</label>
+
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" id="container-width" name="container-width" maxlength="4" class="form-control" value="@Model.ContainerWidth" />
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Set the width of your site layout (in pixels). Only values between 400 and 1800 pixels are allowed." class="info-icon" />
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.ContainerWidth)
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ContainerOpacity" class="control-label col-sm-2">Container opacity</label>
+
+            <div class="col-sm-4">
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.ContainerOpacity, new { @class = "form-control", maxlength = "3" })
+                    <div class="input-group-addon">
+                        <img src="~/Images/icons/actions/info.png" alt="Info" title="Set the level of opacity for the container. Values between 0 to 100 is allowed. Set to 0 if you don't want any visible container." class="info-icon" />
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.ContainerOpacity)
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="text">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="heading-font" class="control-label col-sm-4">Font</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            @Html.DropDownList("heading-font", new SelectList(ViewBag.FontSelect, "Value", "Text", Model.HeadingFont), new { @class = "form-control" })
+                            <div class="input-group-addon">
+                                <a href="javascript:OpenNewFontWindow()" title="Add new font">
+                                    <i class="fa fa-plus" style="color: white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Size</label>
+                    <div class="col-sm-8">
+                        <div id="heading-slider" style="margin-top: 10px"></div>
+                        <input type="hidden" name="heading-size" id="heading-size" value="@Model.HeadingSize" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Color</label>
+                    <div class="col-sm-8">
+                        @Html.Raw(CircuitBentCMS.Models.CustomHelpers.ColorPicker("heading-colorpicker", Model.HeadingColor, "heading-color")) 
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="preview" style="padding: 20px">
+                    <div class="text-container">
+                        <h1>Heading 1</h1>
+                        <h2>Heading 2</h2>
+                        <h3>Heading 3</h3>
+                        <h4>Heading 4</h4>
+                        <h5>Heading 5</h5>
+                        <h6>Heading 6</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row clearfix">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="heading-font" class="control-label col-sm-4">Font</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            @Html.DropDownList("text-font", new SelectList(ViewBag.FontSelect, "Value", "Text", Model.TextFont), new { @class = "form-control" })
+                            <div class="input-group-addon">
+                                <a href="javascript:OpenNewFontWindow()" title="Add new font">
+                                    <i class="fa fa-plus" style="color: white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Size</label>
+                    <div class="col-sm-8">
+                        <div id="text-slider" style="margin-top: 10px"></div>
+                        <input type="hidden" name="text-size" id="text-size" value="@Model.TextSize" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Color</label>
+                    <div class="col-sm-8">
+                        @Html.Raw(CircuitBentCMS.Models.CustomHelpers.ColorPicker("text-colorpicker", Model.TextColor, "text-color")) 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Link color</label>
+                    <div class="col-sm-8">
+                        @Html.Raw(CircuitBentCMS.Models.CustomHelpers.ColorPicker("link-colorpicker", Model.LinkColor, "link-color")) 
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="preview" style="padding: 20px">
+                    <div class="text-container">
+                        <p>
+                            <em>
+                                Nunc condimentum sit amet sapien non lacinia. Suspendisse potenti. Pellentesque ut posuere risus. Ut at tincidunt arcu. Aliquam purus ante, suscipit in mollis vel, blandit id justo. Nam odio elit, sodales condimentum porta nec, dictum eu ligula. Morbi vulputate quam ut sem pharetra, vel scelerisque erat volutpat.
+                            </em>
+                        </p>
+                    
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus dignissim purus vel lorem porta, eget <b>aliquet urna</b> ornare. Ut lectus mi, varius fringilla feugiat non, placerat eget dui. Phasellus commodo eleifend imperdiet. Praesent aliquam bibendum erat, et interdum quam consectetur a. Aliquam id venenatis nunc.
+                        </p>
+                        <p>
+                            <a href="http://url.se">http://www.url.se</a>
+                        </p>
+                    
+                        <p>
+                            Nulla at lacinia arcu. Sed scelerisque orci sit amet erat fringilla molestie. Curabitur scelerisque lacinia tortor at vestibulum. Nunc sit amet posuere tellus. Lorem ipsum dolor sit amet, <a href="http://url.se">consectetur adipiscing elit</a>. Nullam feugiat pellentesque tortor nec malesuada. Integer nisl orci, rutrum eget mi in, fermentum tincidunt mauris. Pellentesque nec mi et nibh aliquet condimentum eget et turpis. Proin rutrum lobortis mauris, ac dapibus tellus condimentum vel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="preview">
+        @{
+            string insertBackgroundSettings = " repeat";
+
+            if (Model.BackgroundImageFullScreen)
+            {
+                insertBackgroundSettings = " no-repeat; background-size: cover;";
+            }
+        }
+        <div class="preview col-sm-8" style="background: url(/Images/PageSettings/@Model.BackgroundImage)@insertBackgroundSettings">
+            <div class="header">
+                @if (!String.IsNullOrEmpty(Model.HeaderImage))
+                {
+                    <img src="~/Images/PageSettings/@Model.HeaderImage" alt="Header image" />
+                }    
+            </div>
+
+            
+
+            <div class="text-container">
+                <h1>Heading 1</h1>
+                <p>
+                    <em>
+                        Nunc condimentum sit amet sapien non lacinia. Suspendisse potenti. Pellentesque ut posuere risus. Ut at tincidunt arcu. Aliquam purus ante, suscipit in mollis vel, blandit id justo. Nam odio elit, sodales condimentum porta nec, dictum eu ligula. Morbi vulputate quam ut sem pharetra, vel scelerisque erat volutpat.
+                    </em>
+                </p>
+                    
+                <h2>Heading 2</h2>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus dignissim purus vel lorem porta, eget <b>aliquet urna</b> ornare. Ut lectus mi, varius fringilla feugiat non, placerat eget dui. Phasellus commodo eleifend imperdiet. Praesent aliquam bibendum erat, et interdum quam consectetur a. Aliquam id venenatis nunc.
+                </p>
+                <p>
+                    <a href="http://url.se">http://www.url.se</a>
+                </p>
+                    
+                <h3>Heading 3</h3>
+                <p>
+                    Nulla at lacinia arcu. Sed scelerisque orci sit amet erat fringilla molestie. Curabitur scelerisque lacinia tortor at vestibulum. Nunc sit amet posuere tellus. Lorem ipsum dolor sit amet, <a href="http://url.se">consectetur adipiscing elit</a>. Nullam feugiat pellentesque tortor nec malesuada. Integer nisl orci, rutrum eget mi in, fermentum tincidunt mauris. Pellentesque nec mi et nibh aliquet condimentum eget et turpis. Proin rutrum lobortis mauris, ac dapibus tellus condimentum vel.
+                </p>
+            </div>
+
+            <div class="footer"> 
+                @if (!String.IsNullOrEmpty(Model.FooterImage))
+                {
+                    <img src="~/Images/PageSettings/@Model.FooterImage" alt="Footer image" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+<div id="font-css-heading"></div>
+<div id="font-css-text"></div>
+
+@section Scripts
+{
+<script>
+    function updateStyles() {
+        var containerOpacity = $('#ContainerOpacity').val() / 100;
+
+        // make sure it is a correct value between 0 - 100
+        if (containerOpacity < 0)
+            containerOpacity = 0;
+        else if (containerOpacity > 100)
+            containerOpacity = 100;
+
+
+        $('.preview').css('background-color', 'rgb(' + $('#background-color').val() + ')');
+
+        $('.text-container').css('background-color', 'rgba(' + $('#container-color').val() + ',' + containerOpacity + ')');
+        $('.text-container h1, .text-container h2, .text-container h3, .text-container h4, .text-container h5, .text-container h6').css('color', 'rgb(' + $('#heading-color').val() + ')');
+        $('.text-container p').css('color', 'rgb(' + $('#text-color').val() + ')');
+
+        // define heading sizes
+        // start size + increment
+        var headingSize = parseFloat($('#heading-size').val());
+        $('.text-container h1').css('font-size', (headingSize + 32) + 'px');
+        $('.text-container h2').css('font-size', (headingSize + 20) + 'px');
+        $('.text-container h3').css('font-size', (headingSize + 14) + 'px');
+        $('.text-container h4').css('font-size', (headingSize + 8) + 'px');
+        $('.text-container h5').css('font-size', (headingSize + 4) + 'px');
+        $('.text-container h6').css('font-size', (headingSize) + 'px');
+
+        //var textSize = 0.6 + (parseFloat($('#text-size').val()) * 0.05);
+        var textSize = $('#text-size').val();
+        $('.text-container p').css('font-size', textSize + 'px');
+
+        $('.text-container a').css('color', 'rgb(' + $('#link-color').val() + ')');
+    }
+
+    function loadFonts(selectList) {
+        $.ajax({
+            url: '/Admin/SiteDesign/LoadFontCss',
+            method: 'POST',
+            data: { fontName: $('#' + selectList).val() }
+        }).done(function (result) {
+            if (selectList == 'heading-font') {
+                $('#font-css-heading').html('<style>' + result.cssCode + '</style>');
+                $('.text-container h1, .text-container h2, .text-container h3').css('font-family', result.fontName);
+            }
+            if (selectList == 'text-font') {
+                $('#font-css-text').html('<style>' + result.cssCode + '</style>');
+                $('.text-container p').css('font-family', result.fontName);
+            }
+        });
+        
+    }
+
+    // open the popup for the "Add new font"
+    function OpenNewFontWindow() {
+        var url = "/Admin/SiteDesign/AddFont";
+        var width = 600;
+        var height = 600;
+        var left = parseInt((screen.availWidth / 2) - (width / 2));
+        var top = parseInt((screen.availHeight / 2) - (height / 2));
+        var windowFeatures = "width=" + width + ",height=" + height +
+            ",status,resizable,left=" + left + ",top=" + top +
+            "screenX=" + left + ",screenY=" + top + ",scrollbars=yes";
+
+        window.open(url, "subWind", windowFeatures, "POS");
+    }
+
+    
+    $(function () {
+        // change the font
+        $('#heading-font, #text-font').change(function () {
+            var selectId = $(this).attr('id');
+
+            loadFonts($(this).attr('id'));
+        });
+
+
+        updateStyles();
+        loadFonts('heading-font');
+        loadFonts('text-font');
+
+        // init the jQuery UI slider for the heading size
+        $( "#heading-slider").slider({
+            range: "max",
+            min: 1,
+            max: 40,
+            @if (!String.IsNullOrEmpty(Model.HeadingSize))
+            {
+                @String.Format("value: {0},", Model.HeadingSize)
+            
+            }
+            else
+            {
+                @:value: 5,
+            }
+            slide: function( event, ui ) {
+                $("#heading-size").val(ui.value);
+                updateStyles();
+            }
+        });
+        // init the jQuery UI slider for the heading size
+        $("#text-slider").slider({
+            range: "max",
+            min: 1,
+            max: 30,
+            @if (!String.IsNullOrEmpty(Model.TextSize))
+            {
+                @String.Format("value: {0},", Model.TextSize)
+            
+            }
+            else
+            {
+                @:value: 5,
+            }
+            slide: function (event, ui) {
+                $("#text-size").val(ui.value);
+                updateStyles();
+            }
+        });
+
+        $('#ContainerOpacity').keyup(function () {
+            updateStyles();
+        });
+        
+    });
+</script>
+}
+

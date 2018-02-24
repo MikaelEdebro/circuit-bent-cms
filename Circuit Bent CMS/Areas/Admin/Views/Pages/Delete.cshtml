@@ -1,0 +1,26 @@
+@model CircuitBentCMS.Models.Page
+
+@{
+    ViewBag.Title = "Pages › Delete page";
+}
+
+<div class="row menu">
+    <div class="col-sm-6">
+        <ol class="breadcrumb">
+            <li><a href="/Admin/Pages">Pages</a></li>
+            <li>@Model.Title</li>
+            <li class="active">Delete</li>
+        </ol>
+    </div>
+</div>
+
+<p>Are you sure you want to delete the page <b>"@Model.Title"</b>?</p>
+
+@using (Html.BeginForm()) {
+    <p>
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a href="/Admin/Pages" class="btn btn-default">Cancel</a>
+    </p>
+}
+
+

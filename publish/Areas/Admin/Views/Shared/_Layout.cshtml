@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Manage site - @ViewBag.Title</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" href="~/Content/Reset.css" />
+        <link rel="stylesheet" href="~/Content/Admin.css" />
+        <link rel="stylesheet" href="~/Content/Admin.Responsive.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        
+        <!-- toastmessage -->
+        <script src="~/Scripts/toastmessage/src/main/javascript/jquery.toastmessage.js"></script>
+        <link href="~/Scripts/toastmessage/src/main/resources/css/jquery.toastmessage.css" rel="stylesheet" type="text/css" />
+
+        <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+        <script>
+            tinymce.init({
+                selector: "textarea",
+                statusbar : false,
+                content_css : "/Content/Site.css?" + new Date().getTime(),
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table contextmenu paste"
+                ],
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+            });
+
+
+            $(function() {
+                $("input[type=datetime]").datepicker({ 
+                    dateFormat: "yy-mm-dd",
+                    firstDay: 1
+                });
+            });
+
+
+            $(function () {
+                // show current menu object highlighted
+                var url = window.location.pathname;
+                var checkString;
+                
+                // now grab every link from the navigation
+                $('.nav a').each(function () {
+                    // and test its href against the url pathname
+                    checkString = url.match($(this).attr('href'));
+                    if ((checkString != null && $(this).attr('href') != '/') || (url == $(this).attr('href'))) {
+                        $(this).addClass('current');
+                    }
+                });
+
+            });
+        </script>
+
+        @if (!String.IsNullOrEmpty(Convert.ToString(TempData["StatusMessage"])))
+        {
+            <script>
+            // user configuration of all toastmessages to come:
+            $(function () {
+                $().toastmessage('showToast', {
+                    @if (!String.IsNullOrEmpty(Convert.ToString(TempData["ErrorMessage"])))
+                    {
+                        <text>
+                            text: '@TempData["StatusMessage"]<br><br>Although there were some errors:@Html.Raw(TempData["ErrorMessage"])',
+                            type: 'error',
+                            stayTime: 8000,
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            text: '@TempData["StatusMessage"]',
+                            type: 'notice',
+                            stayTime: 2000,
+                        </text>
+                    }
+                    
+                    position : 'middle-center'                   
+                });
+
+            });
+            </script>
+        }
+    </head>
+    <body>
+        <div class="multicolor"></div>
+
+        <div class="header">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="nav">
+                    <ul>
+                        <li>
+                            <a href="/Admin/Blogs" title="Blog" style="border-left: 1px solid rgba(0,0,0,.15);">Blog</a>
+                        </li><li>
+                            <a href="/Admin/Shows" title="Shows">Shows</a>
+                        </li><li>
+                            <a href="/Admin/StoreItems" title="Store">Store</a>
+                        </li><li>
+                            <a href="/Admin/Pages" title="Pages">Pages</a>
+                        </li><li>
+                            <a href="/Admin/Menu" title="Menu">Menu</a>
+                        </li><li>
+                            <a href="/Admin/SocialMedia" title="Social media">Social media</a>
+                        </li><li>
+                            <a href="/Admin/ImageGallery" title="Image gallery">Image gallery</a>
+                        </li><li>
+                            <a href="/Admin/MailSettings" title="Mail settings">Mail settings</a>
+                        </li><li>
+                            <a href="/Admin/PageSettings" title="Site configuration">Site configuration</a>
+                        </li>
+                    </ul>
+
+                </div>
+            }
+        </div>
+
+        <div class="body">
+            @Html.Partial("_LoginPartial")
+
+            @RenderBody()
+        </div>
+
+        @Scripts.Render("~/bundles/jqueryval")
+
+    </body>
+</html>

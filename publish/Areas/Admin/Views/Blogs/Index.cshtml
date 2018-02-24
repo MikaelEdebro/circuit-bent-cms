@@ -1,0 +1,39 @@
+@model IEnumerable<BandPage.Models.Blog>
+
+@{
+    ViewBag.Title = "Blog";
+}
+
+<h1>Manage blog</h1>
+
+@Html.ActionLink("Create new post", "Create")
+
+<table>
+    <tr>
+        <th></th>
+        <th>
+            Headline
+        </th>
+        <th class="table-hide">
+            Date
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BlogId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BlogId })
+        </td>
+        <td>
+			@item.Headline
+        </td>
+        <td class="table-hide">
+			@item.Date
+        </td>
+    </tr>
+}
+
+</table>
+
+

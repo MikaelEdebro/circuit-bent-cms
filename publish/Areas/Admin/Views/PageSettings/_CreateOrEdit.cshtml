@@ -1,0 +1,130 @@
+@model BandPage.Models.PageSettings
+
+@* This partial view defines form fields that will appear when creating and editing entities *@
+
+<div class="form-row">
+    @Html.LabelFor(model => model.Title)
+    @Html.EditorFor(model => model.Title)
+    <img src="~/Images/info.png" alt="Info" title="The title of your site. This is what's being shown in the browser tab." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Title)
+</div>
+<div class="form-row">
+    @Html.LabelFor(model => model.Favicon)
+    <input type="file" name="Favicon" id="Favicon" />
+    <img src="~/Images/info.png" alt="Info" title="Favicon is the small icon that appears next to the site address in the browser. Also used if you mark a page as favourite." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.Favicon)<br />
+    
+    @if (!String.IsNullOrEmpty(Model.Favicon))
+    {
+        <input type="hidden" name="Favicon" value="@Model.Favicon" />
+        <label></label>
+        <img src="~/Images/PageSettings/@Model.Favicon" alt="Favicon" />
+        <a href="/Admin/PageSettings/DeleteImage/?type=favicon">
+            <img src="~/Images/icon-delete.gif" alt="Delete" /> Delete favicon
+        </a>
+    }
+    
+</div>
+<div class="form-row">
+    @Html.LabelFor(model => model.MetaKeywords)
+    @Html.EditorFor(model => model.MetaKeywords)
+    <img src="~/Images/info.png" alt="Info" title="Meta keywords are used by search engines to index your site. Separate words by comma, like so: rock, swedish, stoner, heavy, etc..." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.MetaKeywords)
+</div>
+<div class="form-row">
+    @Html.LabelFor(model => model.MetaDescription)
+    @Html.EditorFor(model => model.MetaDescription)
+    <img src="~/Images/info.png" alt="Info" title="Meta description are used by search engines. This is what shows up as a descripiton in Google. If absent, it will look for the first text on the site." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.MetaDescription)
+</div>
+<div class="form-row">
+    @Html.LabelFor(model => model.BackgroundColor)
+    <input type="text" name="BackgroundColor" id="BackgroundColor" class="textbox-color" value="@Model.BackgroundColor" />
+    <img src="~/Images/info.png" alt="Info" title="The background color of your site. Use hexadecimal values without the #, like 00EF0F etc. To close the color picker, just press the icon in the bottom right corner." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.BackgroundColor)
+</div>
+<div class="form-row">
+    @Html.LabelFor(model => model.FooterText)
+    @Html.TextAreaFor(model => model.FooterText, new { @class = "textareaSmall" })
+    <img src="~/Images/info.png" alt="Info" title="The text that appears in the footer" class="info-icon" /><br />
+    @Html.ValidationMessageFor(model => model.FooterText)
+</div>
+<div class="form-row">
+    <input type="submit" value="Save changes" />
+</div>
+
+<div class="form-row" style="margin-top: 40px">
+    <h2>Images</h2>
+</div>
+<div class="form-row">
+    @Html.LabelFor(model => model.BackgroundImage)
+    <input type="file" name="BackgroundImage" id="BackgroundImage" />
+    <img src="~/Images/info.png" alt="Info" title="Upload an image to be used as a background." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.BackgroundImage)<br />
+    
+    @if (!String.IsNullOrEmpty(Model.BackgroundImage))
+    {
+        <input type="hidden" name="BackgroundImage" value="@Model.BackgroundImage" />
+        <img src="~/Images/PageSettings/@Model.BackgroundImage" alt="Background image" class="background-image" />
+        <a href="/Admin/PageSettings/DeleteImage/?type=background" class="image-delete">
+            <img src="~/Images/icon-delete.gif" alt="Delete" /> Delete background image
+        </a>
+    }
+    
+</div>
+<div class="form-row" style="margin-top: 40px">
+    @Html.LabelFor(model => model.HeaderImage)
+    <input type="file" name="HeaderImage" id="HeaderImage" />
+    <img src="~/Images/info.png" alt="Info" title="The image on the header." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.HeaderImage)<br />
+
+    @if (!String.IsNullOrEmpty(Model.HeaderImage))
+    {
+        <input type="hidden" name="HeaderImage" value="@Model.HeaderImage" />
+        <img src="~/Images/PageSettings/@Model.HeaderImage" alt="Header image" class="header-image" />
+        <a href="/Admin/PageSettings/DeleteImage/?type=header" class="image-delete">
+            <img src="~/Images/icon-delete.gif" alt="Delete" /> Delete header image
+        </a>
+    }
+
+</div>
+
+<div class="form-row" style="margin-top: 40px">
+    @Html.LabelFor(model => model.FooterImage)
+    <input type="file" name="FooterImage" id="FooterImage" />
+    <img src="~/Images/info.png" alt="Info" title="Upload an image to be used below the footer." class="info-icon" />
+    @Html.ValidationMessageFor(model => model.FooterImage)<br />
+    
+    @if (!String.IsNullOrEmpty(Model.FooterImage))
+    {
+        <input type="hidden" name="FooterImage" value="@Model.FooterImage" />
+        <img src="~/Images/PageSettings/@Model.FooterImage" alt="Footer image" class="footer-image" />
+        <a href="/Admin/PageSettings/DeleteImage/?type=footer" class="image-delete">
+            <img src="~/Images/icon-delete.gif" alt="Delete" /> Delete footer image
+        </a>
+    }
+    
+</div>
+
+<link rel="stylesheet" media="screen" type="text/css" href="~/Scripts/colorpicker/css/colorpicker.css" />
+<script type="text/javascript" src="~/Scripts/colorpicker/js/colorpicker.js"></script>
+
+<script>
+    $(function () {
+        // apply the color picker
+        $('#BackgroundColor').ColorPicker({
+            onSubmit: function (hsb, hex, rgb, el) {
+                $(el).val(hex);
+                $(el).ColorPickerHide();
+            },
+            onBeforeShow: function () {
+                $(this).ColorPickerSetColor(this.value);
+            }
+        })
+        .bind('keyup', function () {
+            $(this).ColorPickerSetColor(this.value);
+        });
+
+    });
+
+</script>

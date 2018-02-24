@@ -1,0 +1,23 @@
+@model BandPage.Models.Show
+
+@{
+    ViewBag.Title = "Shows › Create";
+}
+
+<h1>Shows › Add show</h1>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+		@Html.Partial("_CreateOrEdit", Model)
+
+        <div class="form-row">
+            <label></label><input type="submit" value="Create" />
+        </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+

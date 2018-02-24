@@ -405,6 +405,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\CircuitBentCMS.sdf" />
+    <Content Include="App_Data\Elmah.sdf" />
+    <Content Include="App_Data\UserAccounts.sdf" />
     <Content Include="App_Data\_PublishFolder.txt" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\Admin.css">

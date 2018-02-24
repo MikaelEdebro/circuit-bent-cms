@@ -22,6 +22,8 @@
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -403,7 +405,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\ElmahErrors.txt" />
     <Content Include="App_Data\_PublishFolder.txt" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\Admin.css">
@@ -1536,8 +1537,6 @@
     <Content Include="Fonts\OpenSans-Regular-webfont.eot" />
     <Content Include="Fonts\OpenSans-Regular-webfont.ttf" />
     <Content Include="Fonts\OpenSans-Regular-webfont.woff" />
-    <None Include="Properties\PublishProfiles\Mamontswe.com.pubxml" />
-    <None Include="Properties\PublishProfiles\Posturesmusic.com.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -1772,12 +1771,6 @@
     <Content Include="Content\fonts\OpenSans-Light-webfont.ttf" />
     <Content Include="Content\fonts\OpenSans-Light-webfont.woff" />
     <Content Include="Content\Site.scss" />
-    <None Include="Properties\PublishProfiles\Barskkvartetten.com.pubxml" />
-    <None Include="Properties\PublishProfiles\CircuitBentStudios.se.pubxml" />
-    <None Include="Properties\PublishProfiles\Easybandpage.com.pubxml" />
-    <None Include="Properties\PublishProfiles\Faceclinic.se.pubxml" />
-    <None Include="Properties\PublishProfiles\Magnolia.pubxml" />
-    <None Include="Properties\PublishProfiles\Mikaeledebro.se.pubxml" />
     <Content Include="Scripts\fancybox\.gitattributes" />
     <Content Include="Scripts\fancybox\CHANGELOG.md" />
     <Content Include="Scripts\fancybox\README.md" />
@@ -1799,7 +1792,6 @@
     <Content Include="Scripts\codemirror\mode\livescript\livescript.ls" />
     <Content Include="Scripts\codemirror\package.json" />
     <Content Include="Scripts\codemirror\README.md" />
-    <None Include="Properties\PublishProfiles\Slasktratten %28test site%29.pubxml" />
     <Content Include="Views\Shared\Navigation.cshtml" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
@@ -1916,6 +1908,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201309271441301_Initial.resx">

@@ -78,3 +78,4 @@ _bin_deployableAssemblies/
 UserUploads/
 .sass-cache/
 .vs/
+publish/
